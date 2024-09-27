@@ -8,7 +8,6 @@ body, html {
     flex-direction: column;
     background-color: #7c95cd;
     cursor: url('assets/puntero_dmt-01-01.svg') 15 15, auto;
-position: absolute;
   }
 
 
