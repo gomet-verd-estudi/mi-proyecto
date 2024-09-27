@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga Automática de Archivo de Texto</title>
+    <style>
+        #content {
+            white-space: pre-wrap; /* Mantiene los saltos de línea del archivo */
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h2>Contenido del archivo:</h2>
+    <div id="content">Cargando contenido...</div>
+
+    <script>
+        const FILE_PATH = 'archivo.txt'; // Ruta del archivo a cargar
+
+        // Función para cargar el contenido del archivo
+        function loadFileContent() {
+            // Agregar un parámetro de consulta único a la URL
+            const timestamp = new Date().getTime(); // Marca de tiempo actual
+            fetch(`${FILE_PATH}?t=${timestamp}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al cargar el archivo');
+                    }
+                    return response.text(); // Convertir la respuesta a texto
+                })
+                .then(text => {
+                    document.getElementById('content').innerText = text; // Mostrar el contenido en el div
+                })
+                .catch(error => {
+                    console.error('Error:', error); // Manejar errores
+                });
+        }
+
+        // Cargar el contenido inicialmente y luego cada 5 segundos
+        loadFileContent();
+        setInterval(loadFileContent, 5000); // Cargar el archivo cada 5 segundos
+    </script>
+</body>
+</html>
