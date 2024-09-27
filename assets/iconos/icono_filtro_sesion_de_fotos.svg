@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 513.2 427.27">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #fad75b;
+        stroke-miterlimit: 10;
+        stroke-width: 35px;
+      }
+    </style>
+  </defs>
+  <g>
+    <rect class="cls-1" x="31.96" y="103.34" width="439.02" height="275.61"/>
+    <circle class="cls-1" cx="251.47" cy="241.14" r="99.09"/>
+  </g>
+  <rect class="cls-1" x="362.13" y="48.32" width="108.86" height="55.01"/>
+</svg>

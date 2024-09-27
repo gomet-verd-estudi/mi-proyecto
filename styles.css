@@ -1,0 +1,789 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #7c95cd;
+    cursor: url('assets/puntero_dmt-01-01.svg') 15 15, auto;
+position: absolute;
+  }
+
+
+  .box {
+  transition: opacity 1s ease-in-out; /* Aumentar la duración y usar una curva más suave */
+  opacity: 1; /* Opacidad inicial, visible */
+}
+a{
+  text-decoration: none;
+  
+  height: auto;
+  display: flex;
+  
+}
+.box.hidden {
+  opacity: 0; /* Oculta el proyecto con opacidad 0 */
+}
+
+  .prj-handscript {
+    display: none;
+    width: 30vw;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+  
+  }
+
+  .prj-handscript2 {
+    display: none;
+    width: 30vw;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    
+  }
+
+  
+
+  .prj-foto {
+    display: flex;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .prj-foto2 {
+    display: flex;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .prj-titulo, .prj-nom, .prj-tag {
+    display: flex;
+    width: 100%;
+    height: auto;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
+    color: #FAD75B;
+  }
+
+  .prj-titulo2, .prj-nom2, .prj-tag2 {
+    display: flex;
+    width: 100%;
+    height: auto;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
+    color: #FAD75B;
+  }
+
+  .prj-fecha {
+    display: flex;
+    width: 100%;
+    height: auto;
+    align-items: flex-end;
+    justify-content: flex-end;
+    flex-direction: column;
+    color: #FAD75B;
+  }
+
+  .prj-fecha2 {
+    display: flex;
+    width: 100%;
+    height: auto;
+    align-items: flex-end;
+    justify-content: flex-end;
+    flex-direction: column;
+    color: #FAD75B;
+  }
+
+  .about {
+    padding: 0.2vw 1vw;
+    background-color: #F29100;
+    color: #FAD75B;
+    font-size: 30pt;
+    border-top: 1.2pt solid #FAD75B;
+height: 50%;
+flex-shrink: 0;
+    max-width: 100%;
+   overflow-y: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    align-items: center;
+  }
+
+  .top-div, .top-div2 {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+    background-color: #7c95cd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+  }
+#bot_about{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15pt;
+    font-family: 'Source Code Pro', monospace;
+    height: auto;
+    width: auto;
+    position: relative; /* Para centrado */
+    text-align: center;
+    text-align: justify;
+    opacity: 100%;
+    bottom: 0.1rem;
+}
+  .square {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    z-index: 10;
+    margin: 1vw;
+  }
+
+  .top-left {
+    top: 0;
+    left: 0;
+    border-top: 1.2pt solid #FAD75B;
+    border-left: 1.2pt solid #FAD75B;
+  }
+
+  .top-right {
+    top: 0;
+    right: 0;
+    border-top: 1.2pt solid #FAD75B;
+    border-right: 1.2pt solid #FAD75B;
+  }
+
+  .bottom-left {
+    bottom: 0;
+    left: 0;
+    border-bottom: 1.2pt solid #FAD75B;
+    border-left: 1.2pt solid #FAD75B;
+    display: flex;
+    
+    color: #FAD75B;
+  }
+
+  .center {
+    bottom: 0;
+    left: 50;
+    right: 50;
+   text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FAD75B;
+    width: 90%;
+  }
+
+ 
+
+  .filtro-videoclip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15pt;
+    font-family: 'Source Code Pro', monospace;
+    height: 2rem;
+    width: 3rem;
+    position: relative; /* Para centrado */
+    opacity: 100%;
+    right: 0.2rem;
+
+  }
+
+  .filtro-sesion-fotos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15pt;
+    font-family: 'Source Code Pro', monospace;
+    height: 2rem;
+    width: 3rem;
+    position: relative; /* Para centrado */
+    opacity: 100%;
+    right: 0.2rem;
+
+  }
+
+  .filtro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15pt;
+    font-family: 'Source Code Pro', monospace;
+    height: auto;
+    width: 100%;
+    position: relative; /* Para centrado */
+    opacity: 100%;
+    bottom: 0.1rem;
+
+  }
+
+  .filtro-artwork {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15pt;
+    font-family: 'Source Code Pro', monospace;
+    height: 2rem;
+    width: 3rem;
+    position: relative; /* Para centrado */
+    opacity: 100%;
+    right: 0.2rem;
+
+  }
+
+  .bot-carrusel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15pt;
+    font-family: 'Source Code Pro', monospace;
+    height: auto;
+    width: 100%;
+    position: relative; /* Para centrado */
+    text-align: center;
+    text-align: justify;
+    opacity: 100%;
+    bottom: 0.1rem;
+
+
+  }
+
+  .bot-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15pt;
+    font-family: 'Source Code Pro', monospace;
+    height: auto;
+    width: 100%;
+    position: relative; /* Para centrado */
+    text-align: center;
+    text-align: justify;
+    opacity: 50%;
+bottom: 0.1rem;
+
+  }
+
+  .linias {
+    display: flex;
+    flex-direction: column;
+    gap: 0.20rem;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 100%;
+    position: relative;
+    top: 1.5px;
+  }
+
+
+  .cajitas-grande {
+    display: flex;
+    flex-direction: row;
+    gap: 0.20rem;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 100%;
+    position: relative;
+    top: 1px;
+  }
+  hr {
+    height: 0.1rem; /* Ajusta la altura de todos los hr */
+    width: 15px;
+    background-color: #FAD75B;
+    border: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+
+  .bottom-right {
+    bottom: 0;
+    right: 0;
+    border-right: 1.2pt solid #FAD75B;
+    border-bottom: 1.2pt solid #FAD75B;
+  
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #FAD75B;
+    text-align: center;
+  }
+
+  .logotipo {
+    display: flex;
+    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: #FAD75B;
+
+  }
+
+  .logotipo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0;
+  }
+
+  .auto-div {
+    flex-shrink: 0;
+    max-width: 100%;
+    padding: 1vw;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    align-items: center;
+    height: auto;
+
+    
+  }
+
+  .contact-container a, .contact-container p {
+    color: #FAD75B;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    flex-grow: 0;
+    text-align: center;
+    cursor: url('assets/puntero_dmt-01-01.svg') 15 15, auto;
+
+  }
+
+  .contact-container {
+    background-color: #F29100;
+    padding: 0.2vw 1vw;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #FAD75B;
+    font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  .scroll-container {
+    padding-left: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    gap: 0.5rem;
+    height: 100%;
+    width: auto;
+    align-items: flex-start;
+    padding: 0;
+    margin: 0;
+  }
+
+  .scroll-container2 {
+    padding-left: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: auto;
+    width: 100%;
+    align-items: flex-start;
+    padding: 0;
+    margin: 0;
+    
+  }
+.cristal-right{
+    display: flex;
+    width: 204px; /* Ancho que sobrepasa al contenedor padre */
+    height: auto;
+    background: rgba(131, 131, 131, 0.312); /* Fondo translúcido */
+    border-radius: 10px;
+    backdrop-filter: blur(10px); /* Efecto cristal */
+    padding: 0.3rem;
+    position: absolute; /* Hace que el div sea independiente de su contenedor padre */
+    bottom: 0.2rem;
+    transition: transform 0.5s ease, width 0.5s ease; /* Transiciones para scale y width */
+z-index: 1;
+margin-right: 0.5rem;
+margin-bottom: 0.3rem;
+flex-direction: row;
+
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+
+.botonera_izquierda{
+  display: flex;
+    width: auto; /* Ancho que sobrepasa al contenedor padre */
+    height: auto;
+    padding-left: 0;
+    padding-bottom: 0.2rem;
+    position: absolute; /* Hace que el div sea independiente de su contenedor padre */
+    bottom: 0;
+    transition: transform 0.5s ease, width 0.5s ease; /* Transiciones para scale y width */
+z-index: 1;
+gap: 0.3rem;
+flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.cristal-left {
+   
+        display: flex;
+        width: 83px; /* Ancho que sobrepasa al contenedor padre */
+        height: auto;
+        background: rgba(131, 131, 131, 0.312); /* Fondo translúcido */
+        border-radius: 10px;
+        backdrop-filter: blur(10px); /* Efecto cristal */
+        padding: 0.3rem;
+        bottom: 0.2rem;
+        transition: transform 0.5s ease, width 0.5s ease; /* Transiciones para scale y width */
+    margin-left: 0.5rem;
+    margin-bottom: 0.3rem;
+    flex-direction: row;
+
+
+    
+}
+
+.cristal-center {
+   
+    display: flex;
+    height: auto;
+    background: rgba(131, 131, 131, 0.312); /* Fondo translúcido */
+    border-radius: 10px;
+    backdrop-filter: blur(10px); /* Efecto cristal */
+    padding: 0.3rem;
+    bottom: 0.2rem;
+margin-left: 0;
+margin-bottom: 0.3rem;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+
+}
+
+/* Tamaño inicial del .cristal-center */
+.cristal-center {
+  width: 84px; /* Ancho por defecto */
+  transition: width 0.5s ease; /* Transición suave al cambiar tamaño */
+}
+
+/* Tamaño reducido cuando tiene la clase 'small' */
+.cristal-center.small {
+  width: 12px;
+}
+
+/* Efecto hover que NO será afectado por el cambio de tamaño */
+.cristal-center:hover {
+  width: 10rem;
+
+}
+
+/* Efecto hover que NO será afectado por el cambio de tamaño */
+.cristal-center.small:hover {
+  width: 4rem;
+
+}
+
+
+.cristal-left:hover {
+width: 10rem;
+}
+
+.cristal-right:hover {
+    width: 20rem;
+    }
+
+
+
+
+  .gran-container {
+    width: calc(100% - 3rem);
+    height: calc(100% - 3rem);
+    overflow-y: auto;
+    overflow-x: scroll;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    gap: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .gran-container2 {
+    width: calc(100% - 2rem);
+    height: calc(100% - 2rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-direction: column;
+    gap: 0.5rem;
+  scroll-behavior: smooth;
+}
+
+  
+
+  .gran-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .about::-webkit-scrollbar {
+    display: none;
+  }
+
+  .box {
+    list-style: none;
+    padding: 0;
+    padding-bottom: 0;
+    margin: 0;
+    height: auto;
+    max-height: 100%;
+    flex: 0 0 auto;
+    transition: height 0.5s ease, width 0.5s ease, background-color 0.5s ease;
+    align-items: flex-start;
+    display: flex;
+    justify-content: flex-start;
+    width: 15vw;
+    overflow: hidden;
+    color: #FAD75B;
+    font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+    flex-direction: column;
+  }
+
+  .box2 {
+    list-style: none;
+    padding: 0;
+    padding-bottom: 0;
+    margin: 0;
+    height: auto;
+    max-height: 100%;
+    flex: 0 0 auto;
+    transition: height 0.5s ease, width 0.5s ease, background-color 0.5s ease;
+    align-items: flex-start;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    overflow: hidden;
+    color: #FAD75B;
+    font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+    flex-direction: column;
+  }
+
+  img {
+    display: flex;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+  }
+
+ .cajitas{
+  width: 0.3rem;
+  height: 0.3rem;
+  border: 1.2pt solid #FAD75B;
+  display: flex;
+  position: relative;
+  
+ }
+
+ .hidden {
+display: none;
+}
+
+
+.iconos{
+display: flex;
+width: 1.5rem;
+align-items: center;
+justify-content: center;
+top: 0.1rem;
+position: relative;
+
+}
+
+.iconos2{
+display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15pt;
+    font-family: 'Source Code Pro', monospace;
+    height: auto;
+    width: 100%;
+    position: relative; /* Para centrado */
+    text-align: center;
+    text-align: justify;
+}
+
+
+#filt-artwork {
+          position: absolute;
+          padding: 0.1rem 0.2rem;
+          background-color: #FAD75B;
+          display: none;
+          pointer-events: none;
+          font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+          z-index: 9000;
+          color: #F29100;
+          opacity: 100%;
+
+      }
+
+      #filt-videoclip {
+          position: absolute;
+          padding: 0.1rem 0.2rem;
+          background-color: #FAD75B;
+          display: none;
+          pointer-events: none;
+          font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+          z-index: 9000;
+          color: #F29100;
+          opacity: 100%;
+
+      }
+
+      #filt-sesion {
+          position: absolute;
+          padding: 0.1rem 0.2rem;
+          background-color: #FAD75B;
+          display: none;
+          pointer-events: none;
+          font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+          z-index: 9000;
+          color: #F29100;
+          opacity: 100%;
+      }
+
+ #listado {
+          position: absolute;
+          padding: 0.1rem 0.2rem;
+          background-color: #FAD75B;
+          display: none;
+          pointer-events: none;
+          font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+          z-index: 9000;
+          color: #F29100;
+      }
+
+      #carrusel {
+          position: absolute;
+          padding: 0.1rem 0.2rem;
+          background-color: #FAD75B;
+          display: none;
+          pointer-events: none;
+          font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+          z-index: 9000;
+          color: #F29100;
+      }
+
+  @media (max-width: 767px) {
+    .about {
+      padding: 0.2vw 1vw;
+      background-color: #F29100;
+      color: #FAD75B;
+      font-size: 20pt;
+      border-top: 1.2pt solid #FAD75B;
+    }
+    .gran-container2 {
+  
+    display: flex;
+
+  }
+
+  .gran-container {
+  
+  display: none;
+
+}
+    
+.cristal-right{
+    width: auto; /* Ancho que sobrepasa al contenedor padre */
+    height: auto;
+    flex-direction: column;
+   
+}
+
+.cristal-left {
+    flex-direction: column;
+    left: 0;
+
+        display: flex;
+        width: auto; /* Ancho que sobrepasa al contenedor padre */
+        height: auto;
+        position: relative;
+
+    
+}
+
+.cristal-center {
+   
+
+left: 0.3rem;
+position: relative;
+
+
+}
+
+.botonera_izquierda{
+  width: auto; /* Ancho que sobrepasa al contenedor padre */
+    height: auto;
+    flex-direction: column;
+    padding-bottom: 0;
+    padding-left: 0.3rem;
+
+}
+.cristal-left:hover {
+    width: auto;
+    }
+    
+    .cristal-right:hover {
+        width: auto;
+        }
+
+#filt-artwork {
+    opacity: 0%;
+}
+
+#filt-videoclip {
+    opacity: 0%;
+}
+
+#filt-sesion {
+opacity: 0%;
+}
+  }

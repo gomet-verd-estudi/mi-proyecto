@@ -1,0 +1,573 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: none;
+}
+
+
+
+
+
+/* styles.css */
+.bot-info {
+    /* Estilos base */
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    justify-content: center;
+    transition: all 0.3s ease; /* Suaviza las transiciones */
+}
+
+/* Estilos específicos cuando se expande */
+.bot-info.expanded {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    width: 30px;
+}
+
+.bot-info.expanded:hover {
+    width: 4rem; /* Anchura al hacer hover */
+}
+
+.info.expanded {
+    width: 50%;
+}
+
+
+
+
+
+
+
+.bot-other.expanded {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    width: 30px;
+}
+
+.bot-other.expanded:hover {
+    width: 4rem; /* Anchura al hacer hover */
+}
+
+.other-prj.expanded {
+    width: 50%;
+}
+
+
+
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: rgb(0, 0, 0);
+}
+
+.logo-reducido{
+    height: auto;
+    width: 70px;
+    z-index: 100;
+    position: absolute;
+    flex-wrap: nowrap;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0;
+
+}
+.prj-conte{
+    display: flex;
+    width: 100%;
+    height: 10rem;
+    background: rgba(131, 131, 131, 0.312); /* Fondo translúcido */
+    border-radius: 6px;
+    border-top-left-radius: 0;
+    backdrop-filter: blur(10px); /* Efecto cristal */
+    transition: transform 0.5s ease, width 0.5s ease; /* Transiciones para scale y width */
+padding: 0.3rem;
+overflow: auto;
+flex-direction: column;
+gap: 0.3rem;
+
+
+}
+.titulo-tab{
+    display: flex;
+    height: auto;
+    width: 100%;
+}
+
+.tag-tab{
+    width: 100%;
+    height: auto;
+    display: flex;
+}
+
+
+   .prj-tab{
+display: flex;
+width: 100%;
+flex-direction: row;
+justify-content: space-between;
+border-bottom: 1pt solid white;
+font-size: 10pt;
+opacity: 0;
+transition: opacity 0.4s ease, font-size 0.5s ease; /* Transiciones para scale y width */
+height: auto;
+flex: 0 0 auto;             /* Los hijos no se expanden, ocupan su tamaño real */
+padding: 0.2rem;
+
+   } 
+
+   .prj-tab:hover{
+    font-size: 12pt;
+
+   }
+
+
+.custom-cursor {
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    transition: transform 350ms ease;
+    transform: translate(-50%, -50%) scale(.3);
+    z-index: 1000;
+    display: block;
+}
+
+.top-div {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.square {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    z-index: 10;
+    margin: 1vw;
+}
+
+.top-left {
+    top: 0;
+    left: 0;
+    border-top: 1.2pt solid rgb(187, 187, 187);
+    border-left: 1.2pt solid rgb(187, 187, 187);
+    font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+    color: rgb(144, 144, 144);
+
+}
+.prj-titulo{
+    left: 0.5rem;
+    top: 0.5rem;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+}
+.top-right {
+    top: 0;
+    right: 0;
+    border-top: 1.2pt solid rgb(187, 187, 187);
+    border-right: 1.2pt solid rgb(187, 187, 187);
+display: flex;
+align-items: center;
+justify-content: flex-end;
+}
+
+.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-bottom: 1.2pt solid rgb(187, 187, 187);
+    border-left: 1.2pt solid rgb(187, 187, 187);
+
+}
+
+.bottom-right {
+    bottom: 0;
+    right: 0;
+    border-right: 1.2pt solid rgb(187, 187, 187);
+    border-bottom: 1.2pt solid rgb(187, 187, 187);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: center;
+
+}
+
+.prj-gallery {
+    width: calc(100% - 3rem);
+    height: calc(100% - 3rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Para que el posicionamiento absoluto de las imágenes funcione */
+}
+
+.prj-img {
+    display: none; /* Ocultar todas las imágenes inicialmente */
+    justify-content: center;
+    position: absolute;
+    width: calc(100% - 3rem);
+    height: calc(100% - 5rem);
+}
+
+.img {
+    width: auto; /* Permitir que el ancho sea automático */
+    height: 100%; /* Hacer que la altura sea del 100% del contenedor */
+    max-width: 100%; /* Evitar que la imagen exceda el ancho del contenedor */
+    object-fit: contain; /* Mantener la proporción de aspecto de la imagen */
+}
+
+.navigation {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    height: 100%;
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    width: 50%;
+    user-select: none;
+    z-index: 100; /* Asegurarse de que los botones estén en la parte superior */
+}
+
+
+
+
+.franja-inferior{
+    display: flex;
+    position: absolute;
+    z-index: 101;
+    width: calc(100% - 3rem);
+    height: auto;
+    bottom: 1.5rem;
+    flex-direction: row;
+gap: 0.5rem;
+font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+    align-items: end;
+    justify-content: flex-start;
+}
+
+.bot-inferiores{
+    display: flex;
+    width: auto;
+    bottom: 1.5rem;
+    flex-direction: column;
+gap: 0.5rem;
+font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+    align-items: end;
+    justify-content: flex-end;
+}
+.contador-fotos{
+    display: flex;
+    flex-direction: row;
+    font-size: 10pt;
+    width: auto;
+    color: rgb(144, 144, 144);
+
+}
+
+.prj-textos{
+    display: flex;
+    width: 100%;
+    height: auto;
+    bottom: 1.5rem;
+    flex-direction: row;
+gap: 0.5rem;
+font-size: 10pt;
+    font-family: 'Source Code Pro', monospace;
+    align-items: end;
+    justify-content: flex-start;
+}
+.contenido-info{
+    display: flex;
+    width: 100%;
+    height: 10rem;
+    background: rgba(131, 131, 131, 0.312); /* Fondo translúcido */
+    border-radius: 6px;
+    border-top-left-radius: 0;
+    backdrop-filter: blur(10px); /* Efecto cristal */
+    transition: transform 0.5s ease, width 0.5s ease; /* Transiciones para scale y width */
+padding: 0.3rem;
+overflow: auto;
+}
+
+.texto-pr{
+    opacity: 0;
+    transition: opacity 0.4s ease; /* Transiciones para scale y width */
+
+}
+
+.contenido-info::-webkit-scrollbar {
+    width: 8px; /* Ancho de la barra lateral */
+  }
+.contenido-info::-webkit-scrollbar-track {
+    background: none; /* Color del fondo del track */
+ }
+
+.contenido-info::-webkit-scrollbar-thumb {
+    background-color:rgb(187, 187, 187); /* Color de la barra */
+    border-radius: 10px; /* Bordes redondeados */
+  }
+
+  .contenido-info::-webkit-scrollbar-thumb:hover {
+    background-color: #9c9c9c; /* Color cuando se pasa el ratón por encima */
+  }
+
+
+
+
+
+
+
+  .prj-conte::-webkit-scrollbar {
+    width: 8px; /* Ancho de la barra lateral */
+  }
+.prj-conte::-webkit-scrollbar-track {
+    background: none; /* Color del fondo del track */
+ }
+
+.prj-conte::-webkit-scrollbar-thumb {
+    background-color:rgb(187, 187, 187); /* Color de la barra */
+    border-radius: 10px; /* Bordes redondeados */
+  }
+
+  .prj-conte::-webkit-scrollbar-thumb:hover {
+    background-color: #9c9c9c; /* Color cuando se pasa el ratón por encima */
+  }
+
+
+
+
+
+.info{
+    width: 130px;
+    transition: transform 0.5s ease, width 0.5s ease; /* Transiciones para scale y width */
+display: flex;
+flex-direction: column;
+}
+
+
+.bot-other{
+    width: auto;
+color: white;
+    transition: transform 0.5s ease, width 0.5s ease; /* Transiciones para scale y width */
+    background: rgba(131, 131, 131, 0.312); /* Fondo translúcido */
+    border-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    backdrop-filter: blur(10px); /* Efecto cristal */
+    display: flex;
+    height: 16.8px;
+    width: 140px;
+    align-items: center;
+    justify-content: center;
+}
+
+.bot-other:hover{
+    width: 13rem;
+
+}
+
+.other-prj{
+    display: flex;
+    width: 140px;
+    align-items: start;
+    justify-content: start;
+flex-direction: column;
+transition: transform 0.5s ease, width 0.5s ease; /* Transiciones para scale y width */
+
+
+}
+
+.bot-info:hover {
+    width: 13rem;
+
+  
+  }
+
+  .other-prj:hover {
+    width: 13rem; /* Anchura al hacer hover */
+}
+
+  .info:hover {
+    width: 13rem; /* Anchura al hacer hover */
+}
+  .info.expanded:hover {
+    width: 70%; /* Anchura al hacer hover */
+}
+
+.other-prj.expanded:hover {
+    width: 70%; /* Anchura al hacer hover */
+}
+
+.bot-info{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 130px;
+    transition: transform 0.5s ease, width 0.5s ease; /* Transiciones para scale y width */
+height: 16.8px;
+background: rgba(131, 131, 131, 0.312); /* Fondo translúcido */
+    border-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    backdrop-filter: blur(10px); /* Efecto cristal */
+    padding: 0.5rem;
+}
+.partes-textos{
+    
+    display: flex;
+color: white;
+
+flex-direction: column;
+}
+
+.bot-rrss{
+    display: flex;
+    color: rgb(144, 144, 144);
+
+}
+
+@media (max-width: 767px) {
+    .prj-img {
+     
+        width: calc(100% - 1rem);
+        height: calc(100% - 1rem);
+    }
+
+    .prj-gallery {
+        width: calc(100% - 1rem);
+        height: calc(100% - 1rem);
+    }
+
+    .prj-tab:hover{
+        font-size: 12pt;
+    
+       }
+    .prj-textos{
+        display: flex;
+        position: absolute;
+        z-index: 101;
+        width: calc(100% - 1rem);
+        height: auto;
+        bottom: 0;
+        flex-direction: column;
+        justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 10pt;
+        font-family: 'Source Code Pro', monospace;
+        align-items: start;
+    }
+    .info:hover {
+        width: 100%;
+    
+      
+      }
+      .info{
+        width: 100%;
+      
+      }
+
+      .info.expanded{
+        width: 100%;
+      
+      }
+
+      .other-prj.expanded{
+        width: 100%;
+      
+      }
+
+      .info.expanded:hover{
+        width: 100%;
+      
+      }
+
+      .other-prj.expanded:hover{
+        width: 100%;
+      
+      }
+
+
+      .info{
+        width: 100%;
+        transition: transform 0.5s ease, width 0.5s ease; /* Transiciones para scale y width */
+    
+    display: flex;
+    
+    }
+
+    .franja-inferior{
+        display: flex;
+        position: absolute;
+        z-index: 101;
+        width: calc(100% - 1rem);
+        height: auto;
+        bottom: 1rem;
+        flex-direction: row;
+    gap: 0.5rem;
+    font-size: 10pt;
+        font-family: 'Source Code Pro', monospace;
+        align-items: end;
+        justify-content: center;
+    }
+    .bot-rrss{
+        display: none;
+    }
+
+    .contador-fotos{
+        display: flex;
+        flex-direction: row;
+        font-size: 10pt;
+        width: calc(100% - 1.5rem);
+        align-items: end;
+        justify-content: end;
+    }
+
+    .prj-tab{
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+        border-bottom: 1pt solid white;
+        font-size: 10pt;
+        opacity: 0;
+        transition: opacity 0.4s ease, font-size 0.5s ease; /* Transiciones para scale y width */
+        height: auto;
+        flex: 0 0 auto;             /* Los hijos no se expanden, ocupan su tamaño real */
+        padding: 0.2rem;
+}
+}
+
+@media (pointer: coarse) {
+    .custom-cursor {
+      display: none;
+    }
+
+    .prj-tab:hover{
+        font-size: 10pt;
+    
+       }
+  }
+
