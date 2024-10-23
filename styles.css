@@ -5,7 +5,6 @@ body, html {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #7c95cd;
     cursor: url('assets/puntero_dmt-01-01.svg') 15 15, auto;
     overflow-x: hidden;
     overflow-y: auto;
@@ -130,7 +129,7 @@ flex-shrink: 0;
     flex-grow: 1;
     position: relative;
     overflow: hidden;
-    background-color: #7c95cd;
+    background: linear-gradient(to bottom, black 0%, black 85%, #7c95cd 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,7 +139,7 @@ flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15pt;
+    font-size: 10pt;
     font-family: 'Source Code Pro', monospace;
     height: auto;
     width: auto;
@@ -200,7 +199,7 @@ flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15pt;
+    font-size: 10pt;
     font-family: 'Source Code Pro', monospace;
     height: 2rem;
     width: 3rem;
@@ -214,7 +213,7 @@ flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15pt;
+    font-size: 10pt;
     font-family: 'Source Code Pro', monospace;
     height: 2rem;
     width: 3rem;
@@ -228,7 +227,7 @@ flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15pt;
+    font-size: 10pt;
     font-family: 'Source Code Pro', monospace;
     height: auto;
     width: 100%;
@@ -242,7 +241,7 @@ flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15pt;
+    font-size: 10pt;
     font-family: 'Source Code Pro', monospace;
     height: 2rem;
     width: 3rem;
@@ -256,7 +255,7 @@ flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15pt;
+    font-size: 10pt;
     font-family: 'Source Code Pro', monospace;
     height: auto;
     width: 100%;
@@ -273,7 +272,7 @@ flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15pt;
+    font-size: 10pt;
     font-family: 'Source Code Pro', monospace;
     height: auto;
     width: 100%;
@@ -339,6 +338,7 @@ bottom: 0.1rem;
     justify-content: center;
     background-color: #FAD75B;
 
+
   }
 
   .logotipo img {
@@ -374,8 +374,10 @@ bottom: 0.1rem;
   }
 
   .contact-container {
-    background-color: #F29100;
+    background: linear-gradient(to bottom, #7c95cd 0%, #7c95cd 10%, #F29100 100%);
+
     padding: 0.2vw 1vw;
+    padding-top: 1vw;
     flex-shrink: 0;
     display: flex;
     flex-direction: row;
@@ -416,9 +418,9 @@ bottom: 0.1rem;
     display: flex;
     width: 204px; /* Ancho que sobrepasa al contenedor padre */
     height: auto;
-    background: rgba(131, 131, 131, 0.312); /* Fondo translúcido */
+    background: rgba(228, 228, 228, 0.367); /* Fondo translúcido */
     border-radius: 10px;
-    backdrop-filter: blur(10px); /* Efecto cristal */
+    backdrop-filter: blur(15px); /* Efecto cristal */
     padding: 0.3rem;
     position: absolute; /* Hace que el div sea independiente de su contenedor padre */
     bottom: 0.2rem;
@@ -734,12 +736,10 @@ display: flex;
 .cristal-right{
     width: auto; /* Ancho que sobrepasa al contenedor padre */
     height: auto;
-    flex-direction: column;
    
 }
 
 .cristal-left {
-    flex-direction: column;
     left: 0;
 
         display: flex;
@@ -762,7 +762,6 @@ position: relative;
 .botonera_izquierda{
   width: auto; /* Ancho que sobrepasa al contenedor padre */
     height: auto;
-    flex-direction: column;
     padding-bottom: 0;
     padding-left: 0.3rem;
 
