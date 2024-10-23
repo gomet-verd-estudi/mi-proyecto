@@ -1,1700 +1,1104 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Scroll Container en Tiempo Real</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Web con Matter.js y GSAP</title>
+    <style>
+        body, html {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+            
+        }
+
+         #ct-drc{
+            width: 40%;
+            height: 100%;
+
+        }
+
+        #ct-izq{
+            width: 60%;
+            height: 100%;
+
+        }
+        #ct-arb{
+            width: 100%;
+            height: 100%;
+            align-items: center;
+        }
+       #soltar-arb, #soltar-izq{
+        flex-direction: row;
+       }
+
+       #soltar-drc{
+        flex-direction: column;
+       }
+
+        .contenedor-izquierdo, #contenedor-derecho {
+           
+            display: flex;
+            transition: height 0.5s ease, width 0.5s ease, background-color 0.5s ease;
+        }
+        .contenedor-izquierdo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .contendor-soltar {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            border: solid 1pt rgb(0, 0, 0);
+            transition: background-color 0.5s ease, width 0.5s ease;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            border-radius: 10px;
+            
+        }
+        #contenedor-derecho {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+        .draggable-mut, .draggable, .hijo-de {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            cursor: pointer;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            transition: height 0.3s ease, width 0.3s ease, background-color 0.5s ease;
+            border-radius: 10px;
+            justify-content: center;
+            flex-shrink: 1;
+            
+
+        }
+
+        .draggable-mut{
+            color: #000000;
+        }
+        .hijo-de{
+            color: red;
+        }
+      img, video  {
+        max-width: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            border: solid 1pt black;
+            max-height: auto;
+
+      }
+     
+        .contenedores {
+            display: flex;
+            width: calc(100% - 4rem);
+            height: calc(100% - 3rem);
+            position: absolute;
+            z-index: 2;
+            align-items: center;
+            flex-direction: column;
+            top: 1.5rem;
+            left: 2rem;
+            border-radius: 4px;
+
+        }
+        .contenedor-superior{
+            width: 100%;
+            height: 5%;
+            display: flex;
+            border-radius: 4px;
 
 
+        }
+        .contenedores-inferiores{
+            width: 100%;
+            height: 95%;
+            display: flex;
+            border-radius: 4px;
+flex-direction: row;
+
+        }
+        #separador {
+    width: 0.5rem;
+    cursor: ew-resize;
+    background-color: transparent;
+    height: 100%;
+    position: relative;
+    z-index: 1000;
+    transition: all 0.5s ease;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+}
+
+#separador:hover {
+    background-color: #000000;
+
+        }
+
+#separador-vertical {
+    height: 0.5rem;
+    cursor: ns-resize;
+    background-color: transparent;
+    width: 100%;
+    position: relative;
+    transition: all 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+#separador-vertical:hover {
+    background-color: #000000;
+
+        }
+        #draggable1{
+            background-color: #FF8145;
+        }
+
+        #draggable2{
+            background-color: #FDFD57;
+           
+        
+        }
+
+        #draggable3{
+            background-color: white;
+            }
+         #draggable4{
+            background-color: #F85484;       
+         }
+         #draggable5{
+            background-color: #8C70A5;       
+         }
+.contenido-prj{
+display: flex;
+flex-direction: column;
+flex-direction: column;
+            overflow-y: auto;
+            width: calc(100% - 1rem);
+            height: calc(100% - 1rem);
+            align-items: center;
+            gap: 0.5rem;
+            overflow-x: hidden;
+            overflow-y: auto; /* Permitir scroll vertical */
+    touch-action: pan-y; /* Permitir desplazamiento */
+}
+
+.contenido-prj::-webkit-scrollbar {
+    width: 1rem; /* Ancho de la barra lateral */
+    opacity: 80%;
+    margin: 0;
+    display: flex;
+    position: absolute;
+
+  }
+  .contenido-prj::-webkit-scrollbar-track {
+    background-color: #F6B8C3;	
+	
+    border-radius: 4px; /* Bordes redondeados */
+    border: solid 1pt black;
+ }
+
+ .contenido-prj::-webkit-scrollbar-thumb {
+    background-color:#4DA77D; /* Color de la barra */
+    border-radius: 4px; /* Bordes redondeados */
+    opacity: 80%;
+    border: solid 1pt black;
+  }
+
+  .contenido-prj::-webkit-scrollbar-thumb:hover {
+    opacity: 80%;
+
+  }
+
+
+        .fondo{
+            position: absolute;
+            height: 100%;
+            width: 100%;
+        }
+        .cmyk-container {
+            
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background-color: white;
+        }
+
+        .naranja, .azul1, .verde {
+            position: relative;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+.tamaño-completo{
+    width: 100%;
+            height: 100%;
+}
+        .layer {
+            position: absolute;
+            width: 2000%;
+            height: 2000%;
+            background-size: 2.7px 2.7px;
+            display: flex;
+            mix-blend-mode: multiply;
+          
+        }
+
+        .contenedor-naranja {
+            width: 300px;
+            height: 300px;
+            background-color: #FF8145;
+        }
+
+        .contenedor-azulclaro {
+            width: 300px;
+            height: 300px;
+            background-color: #85C5EE;
+        }
+
+        .circle {
+          position: absolute;
+            border-radius: 50%;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+           
+        }
+        .base{
+            width: 100%;
+            height: 100%;
+        }
+        .texto{
+            color: blue;
+            font-size: 50pt;
+            position: absolute;
+            z-index: 3;
+            mix-blend-mode: soft-light;
+        }
+
+        .regla {
+            position: absolute;
+            display: flex;
+        }
+
+        /* Reglas laterales */
+        .regla-vertical {
+            width: 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .regla-izquierda {
+            left: 0;
+            top: 0;
+            display: flex;
+            border-right: 0.5pt solid black;
+
+        }
+
+        .regla-derecha {
+            right: 0;
+            top: 0;
+            display: flex;
+            border-left: 0.5pt solid black;
+
+        }
+
+        /* Reglas horizontales */
+        .regla-horizontal {
+            height: 1.5rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .regla-superior {
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            border-bottom: 0.5pt solid black;
+            display: flex;
+
+        }
+
+        .regla-inferior {
+            bottom: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            border-top: 0.5pt solid black;
+
+
+        }
+
+        /* Estilos de las subdivisiones */
+        .subdivision {
+            height: 0.5pt;
+            width: 100%;
+            margin: 0;
+        }
+
+        .subdivision-vertical {
+            width: 0.5pt;
+            height: 100%;
+            margin: 0;
+        }
+
+        .texto-regla {
+            color: black;
+            font-size: 10px;
+        }
+
+        .int-separador-v{
+            width: 100%;
+            height: 300%;
+            position: absolute;
+            z-index: 1001;
+background-color: rgb(0, 0, 0); 
+transition: all 0.5s ease;
+display: flex;
+align-items: center;
+justify-content: center;
+color: white;
+opacity: 0;
+text-align: center;
+text-justify: center;
+border-radius: 4px;
+
+       }
+
+       .int-separador-h{
+            width: 300%;
+            height: 100%;
+            position: absolute;
+            z-index: 10001;
+background-color: rgb(0, 0, 0); 
+transition: all 0.5s ease;
+display: flex;
+align-items: center;
+justify-content: center;
+color: white;
+opacity: 0;
+text-align: center;
+text-justify: center;
+border-radius: 4px;
+
+       }
+       .int-separador-v:hover{
+        opacity: 100%;
+
+       }
+       .int-separador-h:hover{
+        opacity: 100%;
+
+       }
+        @media (max-width: 767px) {
+            .contenedores-inferiores{
+            width: 100%;
+            height: 95%;
+            display: flex;
+            border-radius: 4px;
+flex-direction: column;
+
+        }
+        #ct-izq{
+            width: 100%;
+            height: 50%;
+
+        }
+
+        #ct-drc{
+            width: 100%;
+            height: 50%;
+
+        }
+        .draggable-mut, .draggable {
+            width: 130px;
+            height: 130px;
+            position: absolute;
+            cursor: pointer;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            transition: height 0.3s ease, width 0.3s ease, background-color 0.5s ease;
+            border-radius: 10px;
+            justify-content: center;
+            flex-shrink: 1;
+            
+
+        }
+
+        #separador {
+    width: 100%;
+    cursor: ew-resize;
+    background-color: transparent;
+    height: 0.5rem;
+    position: relative;
+    z-index: 1000;
+    transition: all 0.5s ease;
+
+}
+
+#soltar-drc{
+        flex-direction: row;
+       }
+        }
+    </style>
 </head>
 <body>
-  <div id="listado">LIST</div>
-  <div id="carrusel">GALLERY</div>
-  <div id="filt-artwork">ARTWORKS</div>
-  <div id="filt-sesion">PHOTOGRAPHY_SESIONS</div>
-  <div id="filt-videoclip">VIDEOCLIPS</div>
-
-
-
-<div class="top-div">
- 
-
-  <div class="square top-left"></div>
-  <div class="square top-right"></div>
-  <div class="square bottom-left">
-    <div class="botonera_izquierda">
-
-      <div class="cristal-left">
-        <div class="bot-list">
-          [<div class="linias">
-            <hr><hr><hr><hr>
-          </div>]
-        </div>
-        <div class="bot-carrusel">
-          [<div class="cajitas-grande">
-            <div class="cajitas"></div><div class="cajitas"></div>
-          </div>]
-        </div>
-      </div>
-    
-      <div class="cristal-center"> 
-        <div id="bot_about">[ABOUT]
-    
-        </div> 
-      </div>
-
-
-    </div>
- 
-
-</div> 
-  <div class="square bottom-right"> 
-<div class="cristal-right">
-    <div class="filtro" data-filter="all">
-      <div class="iconos2">[ALL]</div>
-    </div>
-
-    <div class="filtro" data-filter="videoclip">[
-      <div class="iconos"><img src="assets/iconos/icono_filtro_videoclips.svg"></div>
-       ]
-    </div>
-    <div class="filtro" data-filter="sesion">[
-      <div class="iconos"><img src="assets/iconos/icono_filtro_sesion_de_fotos.svg"></div>
-       ]
-    </div>
-    <div class="filtro" data-filter="artwork">[
-      <div class="iconos"><img src="assets/iconos/icono_filtro_artwork.svg"></div>
-       ]
-    </div>
-  </div>
-  </div>
-
-
-
-
-  <div id="gran-container" class="gran-container">  
-    <div class="scroll-container">
-
-        <a href="projects/project_01.html" class="box">
-        <div class="prj-titulo">
-            <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
-            <div class="prj-tag">SESIÓN FOTOGRÁFICA</div>
-        </div>
-        <div class="prj-foto"><img src="assets/image/home/foto_1.jpg"></div>
-        <div class="prj-fecha">PRIMAVERA_2024</div>
-        <div class="prj-handscript"><img src="assets/image/handscript/HANDWRITING_HYPHEN _B.png"></div>
-      </a>
-
-    <div class="box" data-category="artwork">
-        <div class="prj-titulo">
-            <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
-            <div class="prj-tag">ARTWORK</div>
-        </div>
-        <div class="prj-foto"><img src="assets/image/home/FOTO_2.jpg"></div>
-        <div class="prj-fecha">PRIMAVERA_2024</div>
-        <div class="prj-handscript"><img src="assets/image/handscript/HANDWRITING_TENDA_FLORES_AMARILLO.png"></div>
-    </div>
-
-    <div class="box" data-category="videoclip">
-        <div class="prj-titulo">
-            <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
-            <div class="prj-tag">VIDEOCLIP</div>
-        </div>
-        <div class="prj-foto"><img src="assets/image/home/13.gif"></div>
-        <div class="prj-fecha">PRIMAVERA_2024</div>
-        <div class="prj-handscript"><img src="assets/image/handscript/alivio_intermitente_texto_amarillo.png"></div>
-    </div>
-
-      <div class="box" data-category="artwork">
-        <div class="prj-titulo">
-          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
-          <div class="prj-tag">ARTWORK</div>
-        </div>
-        <div class="prj-foto"><img src="assets/image/home/200w.gif"></div>
-        <div class="prj-fecha">PRIMAVERA_2024</div>
-        <div class="prj-handscript"><img src="assets/image/handscript/HANDSCRIPT_PANTERA_BLEU_AMARILLO.png"></div>
-
-      </div>
-
-      <div class="box" data-category="videoclip">
-        <div class="prj-titulo">
-          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
-          <div class="prj-tag">VIDEOCLIP</div>
-        </div>
-        <div class="prj-foto"><img src="assets/image/home/giphy.gif"></div>
-        <div class="prj-fecha">PRIMAVERA_2024</div>
-        <div class="prj-handscript"><img src="assets/image/handscript/LETTERING_80VERANOS_AMARILLO_DM.png"></div>
-
-      </div>
-
-      <div class="box" data-category="sesion">
-        <div class="prj-titulo">
-          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
-          <div class="prj-tag">SESIÓN FOTOGRÁFICA</div>
-        </div>
-        <div class="prj-foto"><img src="assets/image/home/los-gif-de-expacioweb-enrique.gif"></div>
-        <div class="prj-fecha">PRIMAVERA_2024</div>
-      </div>
-
-      <div class="box" data-category="videoclip">
-        <div class="prj-titulo">
-          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
-          <div class="prj-tag">VIDEOCLIP</div>
-        </div>
-        <div class="prj-foto"><img src="assets/image/home/tokyo-lost.gif"></div>
-        <div class="prj-fecha">PRIMAVERA_2024</div>
-      </div>
-
-    
-      <div class="box" data-category="artwork">
-        <div class="prj-titulo">
-          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
-          <div class="prj-tag">ARTWORK</div>
-        </div>
-        <div class="prj-foto"><img src="assets/image/home/13.gif"></div>
-        <div class="prj-fecha">PRIMAVERA_2024</div>
-      </div>
-
-      <div class="box" data-category="artwork">
-        <div class="prj-titulo">
-          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
-          <div class="prj-tag">ARTWORK</div>
-        </div>
-        <div class="prj-foto"><img src="assets/image/home/200w.gif"></div>
-        <div class="prj-fecha">PRIMAVERA_2024</div>
-      </div>
-
-
-
-     
-
- 
-
-
-
-      
-
-
-
-    </div>
-  </div>
   
+    </div>
+    <div class="contenedores">
+        <div class="contenedor-superior">
+            <div class="contenedor-izquierdo" id="ct-arb">
+                <div class="contendor-soltar" id="soltar-arb"></div>
+            </div>
+        </div>
+        <div id="separador-vertical"> 
+            <div class="int-separador-v">▼▲</div>
+        </div>
+        <div class="contenedores-inferiores">
+            <div class="contenedor-izquierdo" id="ct-izq">
+                <div class="contendor-soltar" id="soltar-izq"></div>
+            </div>
+            <div id="separador"><div class="int-separador-h">◀<br>▶</div></div> <!-- Nuevo div separador -->
+            <div class="contenedor-izquierdo" id="ct-drc">
+                <div class="contendor-soltar" id="soltar-drc"></div>
+            </div>
+        </div>
+        
+    </div> 
+    </div>
+    <div id="contenedor-derecho"></div>
+    <div class="draggable-mut" id="draggable1" style="left: 1px;">
+        <div class="circle">ABOUT</div>
 
+    </div>
+    <div class="draggable-mut" id="draggable2" style="left: 1.5px;">
+        <div class="contenido-prj">
+        <img src="delta_foto.jpg">
+        
+        <video loop autoplay muted>
+            <source src="POST 1 LOGO.mp4" type="video/mp4">
+            Tu navegador no soporta la etiqueta de video.
+        </video>
+        <img src="DELTA_TABLAS_web.png">
+    </div>
+    </div>
+    <div class="draggable-mut" id="draggable3" style="left: 2px;">
+        <div class="cmyk-container base">
+        <div class="naranja tamaño-completo">
+            <div class="cmyk-container circle">
+                 <div class="azul1 tamaño-completo"></div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="draggable-mut" id="draggable4">
+        <div class="cmyk-container base">
+        <div class="texto">hola</div>
+        <div class="verde tamaño-completo"></div>
+    </div>
+</div>
+    <div class="draggable-mut" id="draggable5">SERVICES</div>
 
-  <div id="gran-container2" class="gran-container2">  
+    <div class="regla regla-vertical regla-izquierda" id="regla-izquierda"></div>
+<div class="regla regla-vertical regla-derecha" id="regla-derecha"></div>
+
+<!-- Reglas horizontales -->
+<div class="regla regla-horizontal regla-superior" id="regla-superior"></div>
+<div class="regla regla-horizontal regla-inferior" id="regla-inferior"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+    <script src="matter.min.js""></script>
+
    
-  </div>
-
-</div>
-
-
-
-<div class="contact-container">
-  <a href="https://instagram.com">@DE.MATINADA</a>
-  <p>☼</p>
-  
-
-  <a href="mailto:someone@example.com">HOLA@DEMATINADA.COM</a>
-</div>
-
-<div class="about"> 
-  En D'Matinada Estudi, transformamos ideas en experiencias visuales cautivadoras.
-  Somos un estudio creativo audiovisual dedicado a contar historias que conectan y emocionan.
-  Nuestro equipo de cineastas, diseñadores y narradores visuales trabaja en la intersección del arte
-  y la tecnología, creando contenido único que destaca en un mundo saturado de imágenes.
-
-  Desde videoclips, cortometrajes, hasta campañas publicitarias, nos apasiona cada proyecto en el que colaboramos.
-  Nos enfocamos en la innovación, la estética y la autenticidad, porque creemos que cada detalle cuenta y que las
-  historias más poderosas son las que se cuentan con alma.
-  
-  En D'Matinada, no solo producimos videos, creamos momentos que dejan huella.
-</div>
-
-<div class="auto-div logotipo">
-  <img src="assets/image/logotipo/logotipo_naranja-01.svg">
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script src="scripts.js"></script>
-
-
-<script>
-
-
-  
-
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    var botAbout = document.getElementById("bot_about");
-    var cristalCenter = document.querySelector(".cristal-center");
-
-    botAbout.addEventListener("click", function() {
-        var currentText = botAbout.textContent.trim();
-
-        if (currentText === "[ABOUT]") {
-            botAbout.textContent = "[X]";
-            cristalCenter.classList.add("small"); // Añade la clase que cambia el tamaño
-        } else {
-            botAbout.textContent = "[ABOUT]";
-            cristalCenter.classList.remove("small"); // Elimina la clase que cambia el tamaño
-        }
-    });
-});
-
-
-
-
-
-window.onload = function() {
-
-
-
-    // Seleccionamos el div con la clase 'cristal-left'
-    const cristalCenter = document.querySelector('.cristal-center');
-
-    // Verificamos si el div fue encontrado
-    if (!cristalCenter) {
-        console.error('No se encontró el div .cristal-center');
-        return;
-    }
-
-    // Creamos un nuevo ResizeObserver para monitorear los cambios de tamaño
-    const resizeObserver3 = new ResizeObserver(entries => {
-        for (let entry of entries) {
-            const { width, height } = entry.contentRect;
-            console.log(`CENTER Ancho: ${width}px, Alto: ${height}px`);
-        }
-    });
-
-  
-    // Comenzamos a observar el tamaño del div 'cristal-right
-    resizeObserver3.observe(cristalCenter);
-
-
-
-
-
-
-      // Seleccionamos el div con la clase 'cristal-left'
-      const cristalRight = document.querySelector('.cristal-right');
-
-// Verificamos si el div fue encontrado
-if (!cristalRight) {
-    console.error('No se encontró el div .cristal-right');
-    return;
-}
-
-// Creamos un nuevo ResizeObserver para monitorear los cambios de tamaño
-const resizeObserver2 = new ResizeObserver(entries => {
-    for (let entry of entries) {
-        const { width, height } = entry.contentRect;
-        console.log(`RIGHT Ancho: ${width}px, Alto: ${height}px`);
-    }
-});
-
-
-// Comenzamos a observar el tamaño del div 'cristal-right
-resizeObserver2.observe(cristalRight);
-
-
-
-
-
-    // Seleccionamos el div con la clase 'cristal-left'
-    const cristalLeft = document.querySelector('.cristal-left');
-
-    // Verificamos si el div fue encontrado
-    if (!cristalLeft) {
-        console.error('No se encontró el div .cristal-left');
-        return;
-    }
-
-    // Creamos un nuevo ResizeObserver para monitorear los cambios de tamaño
-    const resizeObserver = new ResizeObserver(entries => {
-        for (let entry of entries) {
-            const { width, height } = entry.contentRect;
-            console.log(`Ancho: ${width}px, Alto: ${height}px`);
-        }
-    });
-
-    // Comenzamos a observar el tamaño del div 'cristal-left'
-    resizeObserver.observe(cristalLeft);
-};
-
-
-
-
-
-
-
-  $(".bot-list").click(function () {
-      $(".prj-foto2").slideUp("slow");
-  });
-
-
-
-  $(".bot-list").click(function () {
-      $(".box2").css("flex-direction", "row");
-  });
-
-  $(".bot-list").click(function () {
-    $(".box2").css("border-bottom", "1.2pt solid #FAD75B");
-});
-
-
-
-  $(".bot-carrusel").click(function () {
-      $(".prj-foto2").slideDown("slow");
-  });
-
-  $(".bot-carrusel").click(function () {
-      $(".prj-titulo2").css("flex-direction", "column");
-  });
-  
-  $(".bot-carrusel").click(function () {
-      $(".box2").css("flex-direction", "column");
-  });
-
-  $(".bot-carrusel").click(function () {
-    $(".box2").css("border-bottom", "none");
-});
-
-
-  $(".about").hide();
-  $("#bot_about").click(function () {
-      $(".about").slideToggle("slow");
-  });
-
-  $(".bot-list").click(function () {
-    $(".box").css("flex-direction", "row");
-    $(".prj-titulo").css("flex-direction", "row");
-    $(".box").css("padding-bottom", "0.2rem");
-});
-
-$(".bot-carrusel").click(function () {
-    $(".box").css("flex-direction", "column");
-    $(".prj-titulo").css("flex-direction", "column");
-});
-
-
-  const container = document.querySelector('.gran-container');
-
-// Variables para guardar dimensiones originales
-let originalHeight, originalWidth, aspectRatio;
-
-// Función para verificar la opacidad
-function checkOpacity() {
-  const botList = document.querySelector('.bot-list');
-  const botCarrusel = document.querySelector('.bot-carrusel');
-
-  // Verificar opacidad de ambos elementos
-  const botListOpacity = parseFloat(window.getComputedStyle(botList).opacity);
-  const botCarruselOpacity = parseFloat(window.getComputedStyle(botCarrusel).opacity);
-
-  return botListOpacity === 0.5 && botCarruselOpacity === 1;
-}
-
-container.addEventListener('mouseover', (event) => {
-  // Solo ejecutar si la opacidad es la correcta
-  if (checkOpacity() && event.target.closest('.box')) {
-    const box = event.target.closest('.box');
-
-    originalHeight = box.offsetHeight;
-    originalWidth = box.offsetWidth;
-    aspectRatio = originalWidth / originalHeight;
-
-    const maxHeight = container.clientHeight;
-    const newWidth = maxHeight * aspectRatio;
-
-    box.style.height = `${maxHeight}px`;
-    box.style.width = `${newWidth}px`;
-
-    box.classList.add('expanded');
-  }
-});
-
-container.addEventListener('mouseout', (event) => {
-  if (checkOpacity() && event.target.closest('.box')) {
-    const box = event.target.closest('.box');
-
-    box.style.height = 'auto';
-    box.style.width = '15vw';
-
-    box.classList.remove('expanded');
-  }
-});
-
-
-  
-
-let scrollSpeedFactor = 0.07;
-let scrollVelocity = 0;
-let isScrolling = false;
-
-function smoothScroll() {
-  if (Math.abs(scrollVelocity) > 0.1) {
-    container.scrollLeft += scrollVelocity;
-    scrollVelocity *= 0.95;
-    requestAnimationFrame(smoothScroll);
-  } else {
-    isScrolling = false;
-    scrollVelocity = 0;
-  }
-}
-
-function checkOpacity() {
-  const botList = document.querySelector('.bot-list');
-  const botCarrusel = document.querySelector('.bot-carrusel');
-
-  // Verificar opacidad de ambos elementos
-  const botListOpacity = parseFloat(window.getComputedStyle(botList).opacity);
-  const botCarruselOpacity = parseFloat(window.getComputedStyle(botCarrusel).opacity);
-
-  return botListOpacity === 0.5 && botCarruselOpacity === 1;
-}
-
-container.addEventListener('wheel', function(event) {
-  if (checkOpacity()) {
-    // Si las condiciones de opacidad se cumplen, habilitar scroll lateral
-    event.preventDefault();
-    scrollVelocity += event.deltaY * scrollSpeedFactor;
-    if (!isScrolling) {
-      isScrolling = true;
-      smoothScroll();
-    }
-  } else {
-    // Si las condiciones no se cumplen, permitir el scroll vertical normal
-    container.scrollTop += event.deltaY;
-  }
-});
-
-
-
-
-  container.addEventListener('scroll', function() {
-  const scrollableWidth = container.scrollWidth - container.clientWidth;
-  const botList = document.querySelector('.bot-list');
-  const botCarrusel = document.querySelector('.bot-carrusel');
-  
-  // Verificar si estamos al final del scroll y las opacidades
-  if (container.scrollLeft >= scrollableWidth - 1) {
-    const botListOpacity = parseFloat(window.getComputedStyle(botList).opacity);
-    const botCarruselOpacity = parseFloat(window.getComputedStyle(botCarrusel).opacity);
     
-    // Condición para duplicar solo si bot-list tiene opacidad 50% y bot-carrusel opacidad 100%
-    if (botListOpacity === 0.5 && botCarruselOpacity === 1) {
-      const originalScrollContainer = document.querySelector('.scroll-container');
-      
-      // Clonar el scroll-container original
-      const clonedScrollContainer = originalScrollContainer.cloneNode(true);
-      
-      // Agregar la copia al final del container
-      container.appendChild(clonedScrollContainer);
-    }
-  }
-});
-
-//------------LISTADO SIGUE A CURSOR------------------------------
-//================================================================
-
-// Variable para almacenar si los efectos de hover están activos
-let hoverEffectsActive = false;
-
-// Función para aplicar efectos de hover
-function applyHoverEffects() {
-    const botcarrusel = document.querySelector('.bot-carrusel');
-    const carrusel = document.getElementById('carrusel');
-    const hoverElement = document.querySelector('.bot-list');
-    const listado = document.getElementById('listado');
-
-    if (botcarrusel && carrusel) {
-        botcarrusel.addEventListener('mouseenter', showCarrusel);
-        botcarrusel.addEventListener('mouseleave', hideCarrusel);
-        botcarrusel.addEventListener('mousemove', moveCarrusel);
-    }
-
-    if (hoverElement && listado) {
-        hoverElement.addEventListener('mouseenter', showListado);
-        hoverElement.addEventListener('mouseleave', hideListado);
-        hoverElement.addEventListener('mousemove', moveListado);
-    }
-
-    hoverEffectsActive = true; // Marcar que los eventos han sido añadidos
-}
-
-// Función para eliminar efectos de hover
-function removeHoverEffects() {
-    const botcarrusel = document.querySelector('.bot-carrusel');
-    const carrusel = document.getElementById('carrusel');
-    const hoverElement = document.querySelector('.bot-list');
-    const listado = document.getElementById('listado');
-
-    if (botcarrusel && carrusel) {
-        botcarrusel.removeEventListener('mouseenter', showCarrusel);
-        botcarrusel.removeEventListener('mouseleave', hideCarrusel);
-        botcarrusel.removeEventListener('mousemove', moveCarrusel);
-    }
-
-    if (hoverElement && listado) {
-        hoverElement.removeEventListener('mouseenter', showListado);
-        hoverElement.removeEventListener('mouseleave', hideListado);
-        hoverElement.removeEventListener('mousemove', moveListado);
-    }
-
-    hoverEffectsActive = false; // Marcar que los eventos han sido removidos
-}
-
-// Función para mostrar el carrusel
-function showCarrusel() {
-    const carrusel = document.getElementById('carrusel');
-    if (carrusel) carrusel.style.display = 'block';
-}
-
-// Función para ocultar el carrusel
-function hideCarrusel() {
-    const carrusel = document.getElementById('carrusel');
-    if (carrusel) carrusel.style.display = 'none';
-}
-
-// Función para mover el carrusel con el cursor
-function moveCarrusel(e) {
-    const carrusel = document.getElementById('carrusel');
-    if (carrusel) {
-        carrusel.style.left = `${e.pageX + 10}px`;
-        carrusel.style.top = `${e.pageY + 10}px`;
-    }
-}
-
-// Función para mostrar el listado
-function showListado() {
-    const listado = document.getElementById('listado');
-    if (listado) listado.style.display = 'block';
-}
-
-// Función para ocultar el listado
-function hideListado() {
-    const listado = document.getElementById('listado');
-    if (listado) listado.style.display = 'none';
-}
-
-// Función para mover el listado con el cursor
-function moveListado(e) {
-    const listado = document.getElementById('listado');
-    if (listado) {
-        listado.style.left = `${e.pageX + 10}px`;
-        listado.style.top = `${e.pageY + 10}px`;
-    }
-}
-
-// Función que verifica el ancho de la pantalla y ajusta los eventos en tiempo real
-function checkScreenWidth() {
-    const width = window.innerWidth;
-
-    console.log(`Ancho de pantalla: ${width}px`);
-
-    // Si el ancho es mayor a 767px y los efectos de hover no están activos, añadirlos
-    if (width > 767 && !hoverEffectsActive) {
-        console.log('Aplicando efectos de hover');
-        applyHoverEffects();
-    }
-
-    // Si el ancho es menor o igual a 767px y los efectos de hover están activos, eliminarlos
-    if (width <= 767 && hoverEffectsActive) {
-        console.log('Removiendo efectos de hover');
-        removeHoverEffects();
-    }
-}
-
-// Ejecutar al cargar la página
-checkScreenWidth();
-
-// Verificar el tamaño de la pantalla cada vez que cambie el tamaño de la ventana
-window.addEventListener('resize', checkScreenWidth);
-
-
-
-//================================================================
-//================================================================
-
-
-
-
-
-
-    const botList = document.querySelector('.bot-list');
-const botCarrusel = document.querySelector('.bot-carrusel');
-const scrollContainer = document.querySelector('.scroll-container');
-
-
-// Aplicar la transición suave para flex-direction
-scrollContainer.style.transition = 'flex-direction 0.5s ease-in-out';
-
-// Click en bot-list: cambiar flex-direction a column
-botList.addEventListener('click', function() {
-  scrollContainer.style.flexDirection = 'column';
-});
-
-// Click en bot-carrusel: cambiar flex-direction a row (si está en column)
-botCarrusel.addEventListener('click', function() {
-  if (scrollContainer.style.flexDirection === 'column') {
-    scrollContainer.style.flexDirection = 'row';
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Obtener referencias a los elementos .bot-list y .bot-carrusel
-
-
-// Función para verificar las opacidades de bot-list y bot-carrusel
-function checkOpacityCondition() {
-  const botListOpacity = parseFloat(window.getComputedStyle(botList).opacity);
-  const botCarruselOpacity = parseFloat(window.getComputedStyle(botCarrusel).opacity);
-
-  // Condición inversa: bot-list opacidad al 100% y bot-carrusel opacidad al 50%
-  return botListOpacity === 1 && botCarruselOpacity === 0.5;
-}
-
-// Función para mover el div .prj-foto con el cursor
-function movePrjFotoWithCursor(prjFoto, event) {
-  prjFoto.style.display = 'block';
-  prjFoto.style.position = 'absolute';
-  prjFoto.style.width = '25vw'; // Establecer el ancho a 15vw
-  prjFoto.style.height = 'auto'; // Altura automática
-  prjFoto.style.left = `${event.pageX + 10}px`; // 10px a la derecha del cursor
-  prjFoto.style.top = `${event.pageY + 10}px`; // 10px debajo del cursor
-}
-
-// Función para manejar el hover sobre los div.box
-function handleBoxHover() {
-  const boxes = document.querySelectorAll('.box'); // Seleccionar todos los div.box
-  let currentPrjFotoClone = null; // Para rastrear el prj-foto clonado activo
-
-  boxes.forEach(box => {
-    box.addEventListener('mouseenter', (e) => {
-      if (checkOpacityCondition()) { // Verificar condición de opacidad
-        const prjFoto = box.querySelector('.prj-foto'); // Obtener el prj-foto dentro del box
-        if (prjFoto) {
-          if (currentPrjFotoClone) {
-            currentPrjFotoClone.remove(); // Eliminar el prj-foto clonado anterior
-          }
-
-          // Crear una copia del prj-foto
-          const prjFotoClone = prjFoto.cloneNode(true);
-          prjFotoClone.classList.add('prj-foto-clone'); // Añadir una clase para identificar el clon
-          document.body.appendChild(prjFotoClone); // Agregar la copia al body
-          currentPrjFotoClone = prjFotoClone; // Actualizar el prj-foto clonado actual
-          movePrjFotoWithCursor(prjFotoClone, e); // Mover el prj-foto clonado con el cursor
-        }
-      }
-    });
-
-    box.addEventListener('mousemove', (e) => {
-      if (checkOpacityCondition() && currentPrjFotoClone) {
-        movePrjFotoWithCursor(currentPrjFotoClone, e); // Mover prj-foto clonado con el cursor
-      }
-    });
-
-    box.addEventListener('mouseleave', () => {
-      if (currentPrjFotoClone) {
-        currentPrjFotoClone.remove(); // Eliminar prj-foto clonado al salir del box
-        currentPrjFotoClone = null; // Limpiar referencia
-      }
-    });
-  });
-}
-
-
-
-
-
-
-// Función para restablecer los prj-foto clonados cuando se hace clic en bot-carrusel
-function resetPrjFotos() {
-  const prjFotoClones = document.querySelectorAll('.prj-foto-clone'); // Obtener todos los prj-foto clonados
-
-  // Eliminar todos los clones
-  prjFotoClones.forEach(prjFotoClone => {
-    prjFotoClone.remove();
-  });
-}
-
-// Llamar a la función cuando el DOM esté completamente cargado
-document.addEventListener('DOMContentLoaded', () => {
-  handleBoxHover(); // Manejar el hover en los div.box
-
-  // Restablecer los prj-foto clonados cuando se haga clic en bot-carrusel
-  botCarrusel.addEventListener('click', () => {
-    resetPrjFotos();
-  });
-});
-
-
-
-
-
-
-// Función para verificar las opacidades de bot-list y bot-carrusel para prj-handscript
-function checkHandsOpacityCondition() {
-  const botListOpacity = parseFloat(window.getComputedStyle(botList).opacity);
-  const botCarruselOpacity = parseFloat(window.getComputedStyle(botCarrusel).opacity);
-
-  // Condición: bot-list opacidad al 50% y bot-carrusel opacidad al 100%
-  return botListOpacity === 0.5 && botCarruselOpacity === 1;
-}
-
-// Función para verificar las opacidades inversas, cuando bot-list está al 100% y bot-carrusel al 50%
-function checkInverseOpacityCondition() {
-  const botListOpacity = parseFloat(window.getComputedStyle(botList).opacity);
-  const botCarruselOpacity = parseFloat(window.getComputedStyle(botCarrusel).opacity);
-
-  // Condición inversa: bot-list opacidad al 100% y bot-carrusel opacidad al 50%
-  return botListOpacity === 1 && botCarruselOpacity === 0.5;
-}
-
-// Función para mover el div .prj-handscript con el cursor
-function movePrjHandscriptWithCursor(prjHandscript, event) {
-  prjHandscript.style.display = 'block';
-  prjHandscript.style.position = 'absolute';
-  prjHandscript.style.width = '20vw'; // Establecer el ancho a 15vw
-  prjHandscript.style.height = 'auto'; // Altura automática
-  prjHandscript.style.left = `${event.pageX + 0}px`; // 10px a la derecha del cursor
-  prjHandscript.style.top = `${event.pageY + 0}px`; // 10px debajo del cursor
-}
-
-// Función para manejar el hover sobre los div.box y controlar prj-handscript
-function handleHoverForHandscript() {
-  let currentPrjHandscriptClone = null; // Variable para rastrear el prj-handscript clonado activo
-
-  // Delegación de eventos: escuchar eventos desde el contenedor padre
-  const container = document.querySelector('body'); // Seleccionar un contenedor común superior
-
-  container.addEventListener('mouseenter', (e) => {
-    // Verifica si el elemento que activó el evento es un div.box
-    if (e.target.classList.contains('box') && checkHandsOpacityCondition()) {
-      const prjHandscript = e.target.querySelector('.prj-handscript'); // Obtener el prj-handscript dentro del box
-      if (prjHandscript) {
-        if (currentPrjHandscriptClone) {
-          currentPrjHandscriptClone.style.display = 'none'; // Ocultar el prj-handscript anterior
-        }
-
-        currentPrjHandscriptClone = prjHandscript; // Actualizar el prj-handscript activo
-        prjHandscript.style.display = 'block'; // Asegurarse de mostrar el prj-handscript
-        movePrjHandscriptWithCursor(prjHandscript, e); // Mover el prj-handscript con el cursor
-      }
-    }
-  }, true); // 'true' para capturar eventos en la fase de captura
-
-  container.addEventListener('mousemove', (e) => {
-    // Verifica si el elemento que activó el evento es un div.box y si hay un prj-handscript activo
-    if (currentPrjHandscriptClone) {
-      if (checkHandsOpacityCondition()) {
-        movePrjHandscriptWithCursor(currentPrjHandscriptClone, e); // Mover prj-handscript con el cursor
-      } else {
-        currentPrjHandscriptClone.style.display = 'none'; // Ocultar prj-handscript si la condición de opacidad no se cumple
-      }
-    }
-  });
-
-  container.addEventListener('mouseleave', (e) => {
-    // Verifica si el elemento que activó el evento es un div.box
-    if (e.target.classList.contains('box') && currentPrjHandscriptClone) {
-      currentPrjHandscriptClone.style.display = 'none'; // Ocultar prj-handscript al salir del box
-      currentPrjHandscriptClone = null; // Limpiar referencia
-    }
-  }, true);
-}
-
-// Función para ocultar todos los prj-handscript
-function resetPrjHands() {
-  const prjHandscriptClones = document.querySelectorAll('.prj-handscript'); // Obtener todos los prj-handscript
-  prjHandscriptClones.forEach(prjHandscriptClone => {
-    prjHandscriptClone.style.display = 'none'; // Ocultar prj-handscript
-  });
-}
-
-// Función para gestionar el estado cuando cambia la opacidad
-function checkStateAndReset() {
-  if (checkInverseOpacityCondition()) { // Si bot-list al 100% y bot-carrusel al 50%, ocultar todos los prj-handscript
-    resetPrjHands();
-  }
-}
-
-// Llamar a la función cuando el DOM esté completamente cargado
-document.addEventListener('DOMContentLoaded', () => {
-  handleHoverForHandscript(); // Manejar el hover en los div.box, incluyendo los de scroll-container
-
-  // Escuchar cambios de opacidad y restablecer si es necesario
-  botCarrusel.addEventListener('click', () => {
-    checkStateAndReset(); // Verificar el estado y ocultar si la opacidad cambia
-  });
-
-  botList.addEventListener('click', () => {
-    checkStateAndReset(); // Verificar el estado y ocultar si la opacidad cambia
-  });
-});
-
-
-
-
-
-
-
-//------------------------seguimientos filtros----------------------
-//==================================================================
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const filterButtons = document.querySelectorAll(".filtro");
-    const videoclipsDiv = document.getElementById("filt-videoclip");
-    const sesionDiv = document.getElementById("filt-sesion");
-    const artworkDiv = document.getElementById("filt-artwork");
-
-    // Variable para almacenar si los efectos de hover están activos
-    let hoverEffectsActive = false;
-
-    // Función para aplicar efectos de hover
-    function applyHoverEffects() {
-        filterButtons.forEach((button) => {
-            button.addEventListener('mouseenter', handleMouseEnter);
-            button.addEventListener('mouseleave', handleMouseLeave);
-            button.addEventListener('mousemove', handleMouseMove);
-        });
-
-        hoverEffectsActive = true; // Marcar que los eventos han sido añadidos
-    }
-
-    // Función para eliminar efectos de hover
-    function removeHoverEffects() {
-        filterButtons.forEach((button) => {
-            button.removeEventListener('mouseenter', handleMouseEnter);
-            button.removeEventListener('mouseleave', handleMouseLeave);
-            button.removeEventListener('mousemove', handleMouseMove);
-        });
-
-        // Asegurarse de ocultar los divs inmediatamente
-        hideDiv(videoclipsDiv);
-        hideDiv(sesionDiv);
-        hideDiv(artworkDiv);
-
-        hoverEffectsActive = false; // Marcar que los eventos han sido removidos
-    }
-
-    // Función que maneja el evento mouseenter
-    function handleMouseEnter(event) {
-        if (window.innerWidth > 767) {  // Verificación de tamaño
-            const filterType = event.target.getAttribute('data-filter');
-            if (filterType === 'videoclip') {
-                showDiv(videoclipsDiv);
-            } else if (filterType === 'sesion') {
-                showDiv(sesionDiv);
-            } else if (filterType === 'artwork') {
-                showDiv(artworkDiv);
-            }
-        }
-    }
-
-    // Función que maneja el evento mouseleave
-    function handleMouseLeave(event) {
-        if (window.innerWidth > 767) {  // Verificación de tamaño
-            const filterType = event.target.getAttribute('data-filter');
-            if (filterType === 'videoclip') {
-                hideDiv(videoclipsDiv);
-            } else if (filterType === 'sesion') {
-                hideDiv(sesionDiv);
-            } else if (filterType === 'artwork') {
-                hideDiv(artworkDiv);
-            }
-        }
-    }
-
-    // Función que maneja el evento mousemove
-    function handleMouseMove(event) {
-        if (window.innerWidth > 767) {  // Verificación de tamaño
-            const filterType = event.target.getAttribute('data-filter');
-            if (filterType === 'videoclip') {
-                moveDiv(videoclipsDiv, event);
-            } else if (filterType === 'sesion') {
-                moveDiv(sesionDiv, event);
-            } else if (filterType === 'artwork') {
-                moveDiv(artworkDiv, event);
-            }
-        }
-    }
-
-    // Función para mostrar el div
-    function showDiv(div) {
-        if (div) div.style.display = 'flex';
-    }
-
-    // Función para ocultar el div
-    function hideDiv(div) {
-        if (div) div.style.display = 'none';
-    }
-
-    // Función para mover el div con el cursor
-    function moveDiv(div, event) {
-        if (div) {
-            div.style.left = `${event.pageX + 10}px`;
-            div.style.top = `${event.pageY + 10}px`;
-        }
-    }
-
-    // Función que verifica el ancho de la pantalla y ajusta los eventos en tiempo real
-    function checkScreenWidth() {
-        const width = window.innerWidth;
-
-        console.log(`Ancho de pantalla: ${width}px`);
-
-        // Si el ancho es mayor a 767px y los efectos de hover no están activos, añadirlos
-        if (width > 767 && !hoverEffectsActive) {
-            console.log('Aplicando efectos de hover');
-            applyHoverEffects();
-        }
-
-        // Si el ancho es menor o igual a 767px y los efectos de hover están activos, eliminarlos
-        if (width <= 767 && hoverEffectsActive) {
-            console.log('Removiendo efectos de hover');
-            removeHoverEffects();
-        }
-    }
-
-    // Ejecutar al cargar la página
-    checkScreenWidth();
-
-    // Verificar el tamaño de la pantalla cada vez que cambie el tamaño de la ventana
-    window.addEventListener('resize', checkScreenWidth);
-
-    // Asegurarse de que los divs estén ocultos en pantallas pequeñas al cargar la página
-    if (window.innerWidth <= 767) {
-        hideDiv(videoclipsDiv);
-        hideDiv(sesionDiv);
-        hideDiv(artworkDiv);
+    <script>
+const contIzquierdos = document.querySelectorAll('.contenedor-izquierdo');
+const dropZones = document.querySelectorAll('.contendor-soltar');
+const draggables = document.querySelectorAll('.draggable-mut');
+const draggableMutBodies = new Map();
+let isDragging = false;
+let currentDraggingBody = null;
+let cursorPosition = { x: 0, y: 0 };  // Guardar la posición del cursor o dedo
+
+const { Engine, Render, World, Bodies, Body } = Matter;
+const engine = Engine.create();
+const world = engine.world;
+
+const contDerecho = document.getElementById('contenedor-derecho');
+
+// Renderizado de Matter.js
+const render = Render.create({
+    element: contDerecho,
+    engine: engine,
+    options: {
+        width: contDerecho.clientWidth,
+        height: contDerecho.clientHeight,
+        wireframes: false,
+        background: 'transparent'
     }
 });
 
+Render.run(render);
 
+function createWalls() {
+    const width = contDerecho.clientWidth;
+    const height = contDerecho.clientHeight;
 
+    const walls = [
+        Bodies.rectangle(width / 2, 0, width, 4, { isStatic: true, render: { fillStyle: 'transparent' } }),
+        Bodies.rectangle(width / 2, height, width, 4, { isStatic: true, render: { fillStyle: 'transparent' } }),
+        Bodies.rectangle(0, height / 2, 4, height, { isStatic: true, render: { fillStyle: 'transparent' } }),
+        Bodies.rectangle(width, height / 2, 4, height, { isStatic: true, render: { fillStyle: 'transparent' } })
+    ];
 
+    World.add(world, walls);
+}
 
+createWalls();
 
-
-
-
-
-document.addEventListener('DOMContentLoaded', function() {
-  function cloneAndModify() {
-    // Get the original container
-    const granContainer = document.getElementById('gran-container');
-    const granContainer2 = document.getElementById('gran-container2');
-
-    // Check if both containers exist
-    if (!granContainer || !granContainer2) {
-      console.error('Gran containers not found.');
-      return; // Stop execution if either container is missing
-    }
-
-    // Get the scroll-container inside gran-container
-    const scrollContainer = granContainer.querySelector('.scroll-container');
-    
-    if (!scrollContainer) {
-      console.error('Scroll container not found.');
-      return; // Stop if scroll-container is missing
-    }
-
-    // Get all the child elements of scroll-container (the boxes)
-    const boxes = scrollContainer.children;
-
-    // Iterate through each box and clone it
-    Array.from(boxes).forEach((box) => {
-      // Clone the current box
-      const clone = box.cloneNode(true);
-
-      // Replace the class names in the cloned box
-      clone.classList.replace('box', 'box2');
-
-      // Get the inner elements and replace their classes
-      const title = clone.querySelector('.prj-titulo');
-      if (title) title.classList.replace('prj-titulo', 'prj-titulo2');
-
-      const name = clone.querySelector('.prj-nom');
-      if (name) name.classList.replace('prj-nom', 'prj-nom2');
-
-      const tag = clone.querySelector('.prj-tag');
-      if (tag) tag.classList.replace('prj-tag', 'prj-tag2');
-
-      const photo = clone.querySelector('.prj-foto');
-      if (photo) photo.classList.replace('prj-foto', 'prj-foto2');
-
-      const date = clone.querySelector('.prj-fecha');
-      if (date) date.classList.replace('prj-fecha', 'prj-fecha2');
-
-      const hands = clone.querySelector('.prj-handscript');
-      if (hands) hands.classList.replace('prj-handscript', 'prj-handscript2');
-
-      // Find and update the scroll-container class within each box
-      const innerScrollContainer = clone.querySelector('.scroll-container');
-      if (innerScrollContainer) innerScrollContainer.classList.replace('scroll-container', 'scroll-container2');
-
-      // Append the modified clone to gran-container2
-      granContainer2.appendChild(clone);
+window.addEventListener('resize', function() {
+    World.clear(world, false);
+    createWalls();
+    // Actualizar la posición de los cuerpos al redimensionar
+    draggableMutBodies.forEach((body, element) => {
+        const elemRect = element.getBoundingClientRect();
+        Body.setPosition(body, {
+            x: Math.min(Math.max(elemRect.left + elemRect.width / 2, 0), contDerecho.clientWidth),
+            y: Math.min(Math.max(elemRect.top + elemRect.height / 2, 0), contDerecho.clientHeight)
+        });
     });
-  }
-
-  // Execute the cloning and modification process
-  cloneAndModify();
 });
 
+function esDispositivoTactil() {
+    return ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+}
 
+const isTouchDevice = esDispositivoTactil();
 
+draggables.forEach((draggable) => {
+    let dragTimeout;
+    let isMouseDown = false;
+    let draggableInstance;
+    let hasBeenReleased = false;
+    let releaseHandler;
 
+    addBody(draggable);
 
+    // Inicialización de GSAP Draggable
+    draggableInstance = Draggable.create(draggable, {
+        type: 'x,y',
+        zIndexBoost: true,
+        onPress: function (e) {
+            const isTouch = e.type === "touchstart";
+            cursorPosition.x = isTouch ? e.touches[0].clientX : e.clientX;  // Guardar posición inicial del cursor
+            cursorPosition.y = isTouch ? e.touches[0].clientY : e.clientY;
+            const body = draggableMutBodies.get(draggable);
 
-//==================================================================
-//==================================================================
+            hasBeenReleased = false;
+            isMouseDown = true;
+            isDragging = false;
 
+            releaseHandler = () => {
+                hasBeenReleased = true;
+                clearTimeout(dragTimeout);
+                draggableInstance.enable();
+                isMouseDown = false;
+                isDragging = false;
+                window.removeEventListener('mouseup', releaseHandler);
+                window.removeEventListener('touchend', releaseHandler);
+            };
 
+            window.addEventListener('mouseup', releaseHandler);
+            window.addEventListener('touchend', releaseHandler, { passive: false });
 
+            // Detectar si está dentro de una zona de soltado (contenedor-soltar)
+            if (draggable.parentElement.classList.contains('contenedor-soltar')) {
+                draggableInstance.disable(); // Deshabilitamos el Draggable
 
+                dragTimeout = setTimeout(() => {
+                    if (!hasBeenReleased && isMouseDown) {
+                        // Mover el elemento al body
+                        document.body.appendChild(draggable);
+                        gsap.set(draggable, {
+                            position: 'absolute',
+                            x: cursorPosition.x - draggable.offsetWidth / 2,  // Centrar en el cursor
+                            y: cursorPosition.y - draggable.offsetHeight / 2,
+                            width: '200px',
+                            height: '200px'
+                        });
 
+                        // Sincronizamos con Matter.js
+                        if (body) {
+                            Body.setStatic(body, true);
+                            Body.setAngle(body, body.angle);
+                            currentDraggingBody = body;
+                        }
 
-document.addEventListener("DOMContentLoaded", function() {
-    const filterButtons = document.querySelectorAll(".filtro");
-    const videoclipsDiv = document.getElementById("filt-videoclip");
-    const sesionDiv = document.getElementById("filt-sesion");
-    const artworkDiv = document.getElementById("filt-artwork");
-    const granContainer = document.getElementById("gran-container2");
-    const scrollContainer = document.querySelector(".scroll-container2");
-    const botList = document.querySelector(".bot-list");
-    const botCarrusel = document.querySelector(".bot-carrusel");
-
-    let activeFilter = "all"; // Filtro activo
-    let cloneList = []; // Lista para almacenar los clones
-    let allowCloning = true; // Control para permitir la clonación
-    let cloningInProgress = false; // Prevenir múltiples clonaciones simultáneas
-
-    // Obtener los elementos originales del contenedor
-    let originalBoxes = Array.from(granContainer.querySelectorAll(".box2"));
-
-    // Función para clonar el contenido al final del scroll
-    function cloneContent() {
-        if (cloningInProgress) return;  // Prevenir múltiples clonaciones
-        cloningInProgress = true;  // Marcar que la clonación está en progreso
-
-        console.log("Clonando contenido");
-
-        // Clonar el contenedor de scroll
-        const clone = scrollContainer.cloneNode(true);
-        clone.classList.add("clone");  // Añadir clase 'clone' al nuevo contenedor clonado
-
-        // Añadir clase 'cloned-box' a cada caja clonada para diferenciarlas
-        Array.from(clone.querySelectorAll('.box2')).forEach(box => {
-            box.classList.add("cloned-box");
-            box.style.display = "flex";  // Asegurar que el display es correcto
-        });
-
-        granContainer.appendChild(clone);  // Añadir el clon al contenedor
-        console.log("Clon añadido:", clone);  // Verificar que el clon ha sido añadido
-
-        cloneList.push(clone);  // Guardar el clon en la lista
-
-        // Actualizar el tamaño del scroll del contenedor principal
-        granContainer.scrollTop = granContainer.scrollHeight;
-
-        // Eliminar clones si hay más de 3
-        if (cloneList.length > 3) {
-            removeOldestClones();
-        }
-
-        // Pausa antes de permitir nueva clonación
-        setTimeout(() => {
-            cloningInProgress = false;  // Liberar el proceso de clonación
-        }, 100);  // Breve retraso para evitar múltiples clonaciones rápidas
-    }
-
-    // Control del scroll para activar la clonación al llegar al final
-    granContainer.addEventListener("scroll", function() {
-        if (!allowCloning || cloningInProgress) return; // Prevenir clonaciones innecesarias
-
-        const scrollPosition = granContainer.scrollTop + granContainer.clientHeight;
-        const totalScrollHeight = granContainer.scrollHeight;
-
-        // Si estamos muy cerca del final del scroll (margen de error de 5px)
-        if (scrollPosition >= totalScrollHeight - 5) {
-            cloneContent();  // Clonar el contenido
-        }
-    });
-
-    // Evento click en bot-list para eliminar clones y desactivar clonación
-    botList.addEventListener("click", function() {
-        removeAllClones();
-        allowCloning = false;  // Desactivar la clonación
-        console.log("Clonación deshabilitada");
-    });
-
-    // Evento click en bot-carrusel para reactivar la clonación
-    botCarrusel.addEventListener("click", function() {
-        allowCloning = true;  // Activar la clonación nuevamente
-        console.log("Clonación habilitada nuevamente");
-    });
-
-    // Función para eliminar los clones más antiguos
-    function removeOldestClones() {
-        const oldestClone = cloneList.shift();  // Eliminar el clon más antiguo
-        if (oldestClone) granContainer.removeChild(oldestClone);  // Quitar del DOM
-    }
-
-    // Función para eliminar todos los clones
-    function removeAllClones() {
-        cloneList.forEach(clone => granContainer.removeChild(clone));
-        cloneList = [];  // Limpiar la lista de clones
-    }
-
-    // Filtrado de elementos
-    filterButtons.forEach(button => {
-        if (button.getAttribute("data-filter") !== "all") {
-            button.style.opacity = "0.5";  // Opacidad inicial
-        }
-
-        button.style.transition = "opacity 0.3s ease";  // Suave transición
-
-        button.addEventListener("mouseover", () => {
-            button.style.opacity = "1";  // Opacidad completa en hover
-
-            const filterType = button.getAttribute("data-filter");
-
-            if (filterType === "videoclip") {
-                followCursor(videoclipsDiv);
-            } else if (filterType === "sesion") {
-                followCursor(sesionDiv);
-            } else if (filterType === "artwork") {
-                followCursor(artworkDiv);
-            }
-        });
-
-        button.addEventListener("mouseout", () => {
-            if (button.getAttribute("data-filter") && button.getAttribute("data-filter") !== activeFilter) {
-                button.style.opacity = "0.5";  // Restaurar opacidad
-            }
-
-            const filterType = button.getAttribute("data-filter");
-            if (filterType === "videoclip") {
-                hideDiv(videoclipsDiv);
-            } else if (filterType === "sesion") {
-                hideDiv(sesionDiv);
-            } else if (filterType === "artwork") {
-                hideDiv(artworkDiv);
-            }
-        });
-
-        button.addEventListener("click", () => {
-            // Cambiar la opacidad de todos los botones
-            filterButtons.forEach(b => {
-                b.style.opacity = "0.5";  // Reducir opacidad de los no seleccionados
-            });
-
-            button.style.opacity = "1";  // Botón seleccionado
-
-            activeFilter = button.getAttribute("data-filter");
-
-            // Eliminar todos los clones cuando se cambia el filtro
-            removeAllClones();
-
-            // Aplicar filtro
-            filterBoxes(activeFilter);
-
-            // Restablecer el scroll al inicio del contenedor
-            granContainer.scrollTop = 0;  // Volver el scroll hacia arriba
-        });
-    });
-
-    // Mostrar el div asociado al cursor
-    function followCursor(div) {
-        div.style.display = "flex";  // Mostrar el div
-        document.addEventListener("mousemove", (event) => {
-            div.style.top = event.clientY + "px";
-            div.style.left = event.clientX + "px";
-        });
-    }
-
-    // Ocultar el div
-    function hideDiv(div) {
-        div.style.display = "none";  // Ocultar el div
-    }
-
-    // Filtrar las cajas según el filtro activo
-    function filterBoxes(filter) {
-        // Aplicar filtro a las cajas originales
-        originalBoxes.forEach(box => {
-            const category = box.getAttribute("data-category");
-            if (filter === "all" || filter === category) {
-                box.style.display = "flex";  // Mostrar si coincide con el filtro
+                        isDragging = true;
+                        draggableInstance.enable();  // Reactivamos el Draggable
+                        draggableInstance.startDrag(e);
+                    }
+                }, 300);
             } else {
-                box.style.display = "none";  // Ocultar si no coincide
-            }
-        });
+                gsap.set(draggable, {
+                    x: cursorPosition.x - draggable.offsetWidth / 2,  // Centrar en el cursor
+                    y: cursorPosition.y - draggable.offsetHeight / 2
+                });
 
-        // Aplicar filtro también a los clones
-        cloneList.forEach(clone => {
-            Array.from(clone.querySelectorAll(".cloned-box")).forEach(box => {
-                const category = box.getAttribute("data-category");
-                if (filter === "all" || filter === category) {
-                    box.style.display = "flex";  // Mostrar si coincide con el filtro
-                } else {
-                    box.style.display = "none";  // Ocultar si no coincide
+                if (body) {
+                    Body.setStatic(body, true);
+                    Body.setAngle(body, body.angle);
+                    currentDraggingBody = body;
                 }
+
+                isDragging = true;
+            }
+        },
+        onDrag: function (e) {
+            if (!isDragging) return;
+
+            const isTouch = e.type === "touchmove";
+            const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+            const clientY = isTouch ? e.touches[0].clientY : e.clientY;
+            const body = draggableMutBodies.get(draggable);
+
+            gsap.set(draggable, {
+                x: clientX - draggable.offsetWidth / 2,
+                y: clientY - draggable.offsetHeight / 2
             });
-        });
-    }
+
+            if (body) {
+                Body.setPosition(body, {
+                    x: Math.min(Math.max(clientX, 0), contDerecho.clientWidth),
+                    y: Math.min(Math.max(clientY, 0), contDerecho.clientHeight)
+                });
+            }
+        },
+        onRelease: function (e) {
+            clearTimeout(dragTimeout);  // Limpiar el temporizador cada vez
+            isMouseDown = false;
+            isDragging = false;
+
+            const body = draggableMutBodies.get(draggable);
+
+            if (body) {
+                Body.setStatic(body, false);
+                currentDraggingBody = null;
+            }
+
+            const elemRect = draggable.getBoundingClientRect();
+            const dropZone = Array.from(dropZones).find(zone => {
+                const zoneRect = zone.getBoundingClientRect();
+                return isOverlapping(elemRect, zoneRect);
+            });
+
+            if (dropZone) {
+                dropZone.appendChild(draggable);
+                draggable.classList.replace('draggable-mut', 'hijo-de');
+
+                // **Matar completamente Draggable** al convertir a hijo-de
+                if (draggableInstance) {
+                    draggableInstance.kill();
+                    draggableInstance = null; // Eliminar referencia de la instancia
+                }
+
+                gsap.set(draggable, {
+                    position: 'relative',
+                    top: 'auto',
+                    left: 'auto',
+                    x: 0,
+                    y: 0,
+                    width: '100%',
+                    height: '100%'
+                });
+
+                removeBody(draggable);
+                monitorClickTime(draggable);
+            }
+
+            window.removeEventListener('mouseup', releaseHandler);
+            window.removeEventListener('touchend', releaseHandler);
+        }
+    })[0];
 });
 
+function monitorClickTime(element) {
+    let startTime, timer;
 
+    // Listener para eventos de ratón y táctiles
+    const startHandler = (e) => {
+        const isTouch = e.type === 'touchstart';
+        const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+        const clientY = isTouch ? e.touches[0].clientY : e.clientY;
 
+        cursorPosition.x = clientX;
+        cursorPosition.y = clientY;
 
+        startTime = Date.now();
+        timer = setTimeout(() => {
+            const elapsedTime = Date.now() - startTime;
+            if (elapsedTime > 300 && element.classList.contains('hijo-de')) {
+                // **Cambio de clase a draggable-mut**
+                element.classList.replace('hijo-de', 'draggable-mut');
 
+                // Mover el div al body para ser draggable de nuevo
+                document.body.appendChild(element);
 
+                // Ajustar tamaño y estilo al tamaño original
+                gsap.set(element, {
+                    width: '200px',
+                    height: '200px',
+                    position: 'absolute',
+                    x: cursorPosition.x - element.offsetWidth / 2,  // Centrar en el cursor
+                    y: cursorPosition.y - element.offsetHeight / 2
+                });
 
+                // **Reiniciar Draggable**
+                draggableInstance = Draggable.create(element, {
+                    type: 'x,y',
+                    zIndexBoost: true,
+                    onPress: function(e) {
+                        const isTouch = e.type === "touchstart";
+                        const cx = isTouch ? e.touches[0].clientX : e.clientX;
+                        const cy = isTouch ? e.touches[0].clientY : e.clientY;
+                        gsap.set(element, {
+                            x: cx - element.offsetWidth / 2,
+                            y: cy - element.offsetHeight / 2
+                        });
+                    },
+                    onDrag: function(e) {},
+                    onRelease: function(e) {
+                        const elemRect = element.getBoundingClientRect();
+                        const dropZone = Array.from(dropZones).find(zone => {
+                            const zoneRect = zone.getBoundingClientRect();
+                            return isOverlapping(elemRect, zoneRect);
+                        });
 
+                        if (dropZone) {
+                            dropZone.appendChild(element);
+                            element.classList.replace('draggable-mut', 'hijo-de');
 
+                            // Desactivar GSAP Draggable
+                            draggableInstance.kill();
+                            draggableInstance = null;
 
+                            gsap.set(element, {
+                                position: 'relative',
+                                top: 'auto',
+                                left: 'auto',
+                                x: 0,
+                                y: 0,
+                                width: '100%',
+                                height: '100%'
+                            });
 
+                            removeBody(element);
+                            monitorClickTime(element);  // Reiniciar el ciclo de click
+                        }
+                    }
+                })[0];
+            }
+        }, 300);
+    };
 
+    element.addEventListener('mousedown', startHandler);
+    element.addEventListener('touchstart', startHandler);
 
+    // Limpieza del temporizador
+    const endHandler = () => clearTimeout(timer);
 
-
-
-// Función para ajustar los estilos de scroll-container y box al hacer clic en bot-list
-function adjustScrollContainerAndBoxes() {
-  const scrollContainer = document.querySelector('.scroll-container');
-  const boxes = document.querySelectorAll('.scroll-container .box');
-
-  // Establecer el scroll-container al 100% del ancho del gran-container
-  scrollContainer.style.width = '100%';
-
-  // Hacer que los boxes ocupen el 100% del ancho del scroll-container
-  boxes.forEach(box => {
-    box.style.width = '100%';
-    box.style.borderBottom = '1.2pt solid #FAD75B'; // Agregar borde inferior a cada box
-  });
+    element.addEventListener('mouseup', endHandler);
+    element.addEventListener('touchend', endHandler);
 }
 
-// Función para restaurar el tamaño original de los boxes al hacer clic en bot-carrusel
-function restoreScrollContainerAndBoxes() {
-  const scrollContainer = document.querySelector('.scroll-container');
-  const boxes = document.querySelectorAll('.scroll-container .box');
-
-  // Restaurar el tamaño original del scroll-container y de los boxes
-  scrollContainer.style.width = ''; // Remover el ancho fijado
-  boxes.forEach(box => {
-    box.style.width = ''; // Remover el ancho fijado
-    box.style.borderBottom = ''; // Remover el borde inferior
-  });
+function isOverlapping(rect1, rect2) {
+    return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
 }
 
-// Llamada a la función al hacer clic en bot-list
-botList.addEventListener('click', () => {
-  adjustScrollContainerAndBoxes();
+function addBody(element) {
+    const elemRect = element.getBoundingClientRect();
+    const body = Bodies.rectangle(
+        elemRect.left + elemRect.width / 2,
+        elemRect.top + elemRect.height / 2,
+        elemRect.width,
+        elemRect.height,
+        { restitution: 0.5 }
+    );
+    draggableMutBodies.set(element, body);
+    World.add(world, body);
+}
+
+function removeBody(element) {
+    const body = draggableMutBodies.get(element);
+    if (body) {
+        World.remove(world, body);
+        draggableMutBodies.delete(element);
+    }
+}
+
+function update() {
+    Engine.update(engine);
+
+    draggableMutBodies.forEach((body, element) => {
+        if (!isDragging || body !== currentDraggingBody) {
+            const pos = body.position;
+            const angle = body.angle;
+
+            element.style.transform = `translate(${pos.x - element.offsetWidth / 2}px, ${pos.y - element.offsetHeight / 2}px) rotate(${angle}rad)`;
+        }
+    });
+
+    requestAnimationFrame(update);
+}
+
+update();
+
+
+
+
+
+
+
+// Redimensionamiento Horizontal
+const separador = document.getElementById('separador');
+const contenedorIzq = document.getElementById('ct-izq');
+const contenedorDrc = document.getElementById('ct-drc');
+const contenedoresInferiores = document.querySelector('.contenedores-inferiores');
+
+let isResizing = false;
+
+function iniciarRedimensionamiento(e) {
+    isResizing = true;
+}
+
+function detenerRedimensionamiento() {
+    isResizing = false;
+}
+
+function redimensionarHorizontal(e) {
+    if (!isResizing) return;
+
+    if (e.type === 'touchmove') {
+        e.preventDefault();
+    }
+
+    const eventX = e.clientX || (e.touches && e.touches[0].clientX);
+    const contenedoresRect = contenedoresInferiores.getBoundingClientRect();
+    const mouseX = eventX - contenedoresRect.left;
+
+    const newLeftWidth = (mouseX / contenedoresRect.width) * 100;
+    const newRightWidth = 100 - newLeftWidth;
+
+    if (newLeftWidth > 5 && newRightWidth > 5) {
+        contenedorIzq.style.width = `${newLeftWidth}%`;
+        contenedorDrc.style.width = `${newRightWidth}%`;
+    }
+}
+
+// Eventos para redimensionamiento
+separador.addEventListener('mousedown', iniciarRedimensionamiento);
+separador.addEventListener('touchstart', iniciarRedimensionamiento, { passive: false });
+
+window.addEventListener('mousemove', redimensionarHorizontal);
+window.addEventListener('touchmove', redimensionarHorizontal, { passive: false });
+
+window.addEventListener('mouseup', detenerRedimensionamiento);
+window.addEventListener('touchend', detenerRedimensionamiento);
+
+// Redimensionamiento Vertical
+const separadorVertical = document.getElementById('separador-vertical');
+const contenedorSup = document.querySelector('.contenedor-superior');
+const contenedorInf = document.querySelector('.contenedores-inferiores');
+const contenedoresTotal = document.querySelector('.contenedores');
+
+let isResizingVertical = false;
+
+function iniciarRedimensionamientoVertical(e) {
+    isResizingVertical = true;
+}
+
+function detenerRedimensionamientoVertical() {
+    isResizingVertical = false;
+}
+
+function redimensionarVertical(e) {
+    if (!isResizingVertical) return;
+
+    if (e.type === 'touchmove') {
+        e.preventDefault();
+    }
+
+    const eventY = e.clientY || (e.touches && e.touches[0].clientY);
+    const contenedoresRect2 = contenedoresTotal.getBoundingClientRect();
+    const mouseY = eventY - contenedoresRect2.top;
+
+    const newTopHeight = (mouseY / contenedoresRect2.height) * 100;
+    const newBottomHeight = 100 - newTopHeight;
+
+    if (newTopHeight > 5 && newBottomHeight > 5) {
+        contenedorSup.style.height = `${newTopHeight}%`;
+        contenedorInf.style.height = `${newBottomHeight}%`;
+    }
+}
+
+// Eventos para redimensionamiento vertical
+separadorVertical.addEventListener('mousedown', iniciarRedimensionamientoVertical);
+separadorVertical.addEventListener('touchstart', iniciarRedimensionamientoVertical, { passive: false });
+
+window.addEventListener('mousemove', redimensionarVertical);
+window.addEventListener('touchmove', redimensionarVertical, { passive: false });
+
+window.addEventListener('mouseup', detenerRedimensionamientoVertical);
+window.addEventListener('touchend', detenerRedimensionamientoVertical);
+
+// Generación de capas
+function generarCapas(contenedor, capas) {
+    capas.forEach(({ gradient, rotation, opacity }) => {
+        const layer = document.createElement('div');
+        layer.classList.add('layer');
+        layer.style.backgroundImage = gradient;
+        layer.style.transform = `rotate(${rotation})`;
+        layer.style.opacity = opacity;
+        contenedor.appendChild(layer);
+    });
+}
+
+const naranjaGradients = [
+    { gradient: 'radial-gradient(circle, rgba(0, 255, 255, 1) 53%, transparent 50%)', rotation: '0deg', opacity: '0%' },
+    { gradient: 'radial-gradient(circle, rgba(255, 0, 255, 1) 53%, transparent 58%)', rotation: '45deg', opacity: '100%' },
+    { gradient: 'radial-gradient(circle, rgba(255, 255, 0, 1) 65%, transparent 60%)', rotation: '0deg', opacity: '100%' },
+    { gradient: 'radial-gradient(circle, rgba(0, 0, 0, 1) 50%, transparent 25%)', rotation: '45deg', opacity: '0%' }
+];
+
+const azul1Gradients = [
+    { gradient: 'radial-gradient(circle, rgba(0, 255, 255, 1) 50%, transparent 50%)', rotation: '0deg', opacity: '100%' },
+    { gradient: 'radial-gradient(circle, rgba(255, 0, 255, 1) 9%, transparent 58%)', rotation: '45deg', opacity: '100%' },
+    { gradient: 'radial-gradient(circle, rgba(255, 255, 0, 1) 65%, transparent 60%)', rotation: '0deg', opacity: '0%' },
+    { gradient: 'radial-gradient(circle, rgba(0, 0, 0, 1) 50%, transparent 25%)', rotation: '45deg', opacity: '0%' }
+];
+
+const verdeGradients = [
+    { gradient: 'radial-gradient(circle, rgba(0, 255, 255, 1) 80%, transparent 70%)', rotation: '45deg', opacity: '100%' },
+    { gradient: 'radial-gradient(circle, rgba(255, 0, 255, 1) 10%, transparent 70%)', rotation: '15deg', opacity: '100%' },
+    { gradient: 'radial-gradient(circle, rgba(255, 255, 0, 1) 62%, transparent 60%)', rotation: '75deg', opacity: '100%' },
+    { gradient: 'radial-gradient(circle, rgba(0, 0, 0, 1) 50%, transparent 25%)', rotation: '45deg', opacity: '0%' }
+];
+
+const naranjaDiv = document.querySelector('.naranja');
+generarCapas(naranjaDiv, naranjaGradients);
+
+const azul1Div = document.querySelector('.azul1');
+generarCapas(azul1Div, azul1Gradients);
+
+const verdeDiv = document.querySelector('.verde');
+generarCapas(verdeDiv, verdeGradients);
+
+function actualizarReglas() {
+    const alturaPantalla = window.innerHeight;
+    const anchuraPantalla = window.innerWidth;
+    const numSubdivisiones = 15;
+
+    const reglaIzquierda = document.getElementById('regla-izquierda');
+    const reglaDerecha = document.getElementById('regla-derecha');
+    const reglaSuperior = document.getElementById('regla-superior');
+    const reglaInferior = document.getElementById('regla-inferior');
+
+    [reglaIzquierda, reglaDerecha, reglaSuperior, reglaInferior].forEach(regla => regla.innerHTML = '');
+
+    function crearSubdivisiones(limite, esVertical) {
+        const fragmento = document.createDocumentFragment();
+        const paso = limite / numSubdivisiones;
+
+        for (let i = 0; i <= numSubdivisiones; i++) {
+            const div = document.createElement('div');
+            const texto = document.createElement('span');
+            texto.classList.add('texto-regla');
+            texto.innerText = Math.round(paso * i) + 'px';
+
+            if (esVertical) {
+                div.classList.add('subdivision-vertical');
+                div.style.top = `${paso * i}px`;
+                texto.style.transform = 'rotate(-90deg)';
+                div.appendChild(texto);
+            } else {
+                div.classList.add('subdivision');
+                div.style.left = `${paso * i}px`;
+                div.appendChild(texto);
+            }
+
+            fragmento.appendChild(div);
+        }
+
+        return fragmento;
+    }
+
+    reglaIzquierda.appendChild(crearSubdivisiones(alturaPantalla, true));
+    reglaDerecha.appendChild(crearSubdivisiones(alturaPantalla, true));
+    reglaSuperior.appendChild(crearSubdivisiones(anchuraPantalla, false));
+    reglaInferior.appendChild(crearSubdivisiones(anchuraPantalla, false));
+}
+
+window.addEventListener('load', actualizarReglas);
+window.addEventListener('resize', actualizarReglas);
+
+// Ajustar el manejo de scroll y arrastre en pantallas táctiles
+document.querySelector('.contenido-prj').addEventListener('touchstart', function (event) {
+    let scrollTimeout;
+    const touchStartHandler = (event) => {
+        scrollTimeout = setTimeout(() => {
+            if (!isMouseDown) {
+                event.preventDefault();
+            }
+        }, 300); // 300ms antes de activar el drag
+    };
+
+    const touchEndHandler = () => {
+        clearTimeout(scrollTimeout);
+    };
+
+    this.addEventListener('touchmove', touchStartHandler, { passive: false });
+    this.addEventListener('touchend', touchEndHandler);
+    this.addEventListener('touchcancel', touchEndHandler);
 });
 
-// Llamada a la función para restaurar el tamaño al hacer clic en bot-carrusel
-botCarrusel.addEventListener('click', () => {
-  restoreScrollContainerAndBoxes();
-});
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-document.addEventListener("DOMContentLoaded", function() {
-  const filterButtons = document.querySelectorAll(".filtro");
-  const granContainer = document.querySelector(".gran-container");
-  let activeFilter = "all";  // Para mantener el filtro activo
-
-  if (filterButtons.length === 0) {
-    console.error("No se encontraron botones de filtro.");
-    return;
-  }
-
-  // Función para aplicar el filtro
-  const applyFilter = (filter) => {
-    const projects = document.querySelectorAll(".scroll-container .box");
-    console.log(`Aplicando filtro: ${filter}`);
     
-    // Filtrar proyectos existentes y sus copias
-    projects.forEach(project => {
-      const projectCategory = project.getAttribute("data-category");
-
-      if (projectCategory) {
-        if (filter === "all" || projectCategory === filter) {
-          project.classList.remove("hidden");
-          project.style.pointerEvents = "auto"; // Permitir interacción
-        } else {
-          project.classList.add("hidden");
-          project.style.pointerEvents = "none"; // Desactivar interacción
-        }
-      }
-    });
-  };
-
-  // Función para eliminar todas las copias de scroll-container excepto la primera
-  const resetCopies = () => {
-    const scrollContainers = document.querySelectorAll('.scroll-container');
+    </script>
     
-    // Mantener el primer scroll-container y eliminar los demás
-    if (scrollContainers.length > 1) {
-      for (let i = scrollContainers.length - 1; i > 0; i--) {
-        scrollContainers[i].remove();
-      }
-      console.log("Se eliminaron todas las copias adicionales del scroll-container.");
-    }
-  };
-
-  // Agregar listeners para los botones de filtro
-  filterButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      activeFilter = button.getAttribute("data-filter");
-      applyFilter(activeFilter);
-
-      // Resetear las copias al hacer clic en un filtro
-      resetCopies();
-
-      // Desplazar el contenedor al inicio
-      if (granContainer) {
-        granContainer.scrollTop = 0;  // Reiniciar scroll al inicio
-        console.log("El contenedor 'gran-container' ha sido desplazado al inicio.");
-      }
-    });
-  });
-
-  // Detectar cuando se agreguen nuevos elementos a .scroll-container (las copias)
-  const scrollContainer = document.querySelector(".scroll-container");
-  if (scrollContainer) {
-    const observer = new MutationObserver(() => {
-      console.log("Se detectaron cambios en el DOM de .scroll-container, reaplicando filtro.");
-      applyFilter(activeFilter); // Reaplica el filtro cuando se agrega un nuevo proyecto/copia
-    });
-
-    observer.observe(scrollContainer, { childList: true, subtree: true });
-  } else {
-    console.error("No se encontró el contenedor '.scroll-container'.");
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//--------------------clonador mobile------------------------
-//============================================================
-
-
-
-
-//=========================================================
-
-
-
-
-
-
-
-
-
-
-
-
-// Asegurarse de que el DOM está completamente cargado antes de acceder a los elementos
-document.addEventListener('DOMContentLoaded', () => {
-  
-  // Obtener referencias a los botones
-  const botList = document.querySelector('.bot-list');
-  const botCarrusel = document.querySelector('.bot-carrusel');
-  
-  // Obtener referencia al contenedor principal
-  const container = document.querySelector('.gran-container');
-
-  // Establecer las opacidades iniciales
-  botList.style.opacity = '0.5'; // Opacidad inicial de bot-list al 50%
-  botCarrusel.style.opacity = '1'; // Opacidad inicial de bot-carrusel al 100%
-  
-  // Bandera para controlar la duplicación
-  let duplicating = false;
-
-  // Función para obtener todas las prj-foto en todas las instancias de scroll-container
-  function getAllPrjFotos() {
-    return document.querySelectorAll('.scroll-container .prj-foto');
-  }
-
-  // Función para el efecto de slide up
-  function slideUp(element, duration = 500) {
-    element.style.transition = `height ${duration}ms ease, opacity ${duration}ms ease`;
-    element.style.height = `${element.offsetHeight}px`;
-    element.offsetHeight; // Forzar el reflow para que la transición funcione correctamente
-    element.style.overflow = 'hidden';
-    element.style.height = '0';
-    element.style.opacity = '0';
-
-    setTimeout(() => {
-      element.style.display = 'none';
-      element.style.removeProperty('height');
-      element.style.removeProperty('opacity');
-      element.style.removeProperty('transition');
-      element.style.removeProperty('overflow');
-    }, duration);
-  }
-
-  // Función para el efecto de slide down
-  function slideDown(element, duration = 500) {
-    element.style.display = 'block';
-    let height = element.offsetHeight;
-    element.style.height = '0';
-    element.style.opacity = '0';
-    element.style.overflow = 'hidden';
-    element.offsetHeight; // Forzar el reflow para que la transición funcione
-    element.style.transition = `height ${duration}ms ease, opacity ${duration}ms ease`;
-    element.style.height = `${height}px`;
-    element.style.opacity = '1';
-
-    setTimeout(() => {
-      element.style.removeProperty('height');
-      element.style.removeProperty('opacity');
-      element.style.removeProperty('transition');
-      element.style.removeProperty('overflow');
-    }, duration);
-  }
-
-  // Función para cambiar la opacidad de forma suave
-  function changeOpacity(element, targetOpacity, duration = 500) {
-    element.style.transition = `opacity ${duration}ms ease`;
-    element.style.opacity = targetOpacity;
-  }
-
-  // Hover effect para cambiar opacidad cuando está al 50%
-  function handleHoverEffect(element) {
-    element.addEventListener('mouseenter', () => {
-      if (element.style.opacity === '0.5') {
-        changeOpacity(element, 1);
-      }
-    });
-
-    element.addEventListener('mouseleave', () => {
-      if (element.style.opacity === '1' && 
-        ((element === botList && botCarrusel.style.opacity === '1') || 
-         (element === botCarrusel && botList.style.opacity === '1'))) {
-        changeOpacity(element, 0.5);
-      }
-    });
-  }
-
-  // Aplicar efecto de hover en ambos divs
-  handleHoverEffect(botList);
-  handleHoverEffect(botCarrusel);
-
-  // Slide Up en prj-foto cuando se hace clic en bot-list
-  botList.addEventListener('click', () => {
-    const prjFotos = getAllPrjFotos();
-    prjFotos.forEach(prjFoto => {
-      if (prjFoto.style.display !== 'none') {
-        slideUp(prjFoto);
-      }
-    });
-
-    // Cambiar opacidades de forma suave
-    if (botCarrusel.style.opacity === '1' || botCarrusel.style.opacity === '') {
-      changeOpacity(botCarrusel, 0.5);
-      changeOpacity(botList, 1);
-    }
-
-    // Scroll al inicio de gran-container
-    container.scrollTo({ left: 0, behavior: 'smooth' });
-
-    // Eliminar todas las copias de scroll-container excepto la primera
-    const scrollContainers = container.querySelectorAll('.scroll-container');
-    scrollContainers.forEach((scrollContainer, index) => {
-      if (index > 0) {
-        scrollContainer.remove();
-      }
-    });
-
-    // Desactivar la duplicación
-    duplicating = false; // Cambiado para desactivar duplicación después del clic en `bot-list`
-  });
-
-  // Slide Down en prj-foto cuando se hace clic en bot-carrusel
-  botCarrusel.addEventListener('click', () => {
-    const prjFotos = getAllPrjFotos();
-    prjFotos.forEach(prjFoto => {
-      if (prjFoto.style.display === 'none') {
-        slideDown(prjFoto);
-      }
-    });
-
-    // Cambiar opacidades de forma suave
-    if (botList.style.opacity === '1' || botList.style.opacity === '') {
-      changeOpacity(botList, 0.5);
-      changeOpacity(botCarrusel, 1);
-    }
-
-    // Reactivar la capacidad de hacer copias
-    duplicating = true; // Reactivamos la duplicación solo cuando se hace clic en `bot-carrusel`
-  });
-
-  // Restaurar duplicación de scroll-container solo cuando está habilitado
-  container.addEventListener('scroll', function() {
-    if (duplicating) { // Solo permitir la duplicación cuando está habilitado
-      const scrollableWidth = container.scrollWidth - container.clientWidth;
-      if (container.scrollLeft >= scrollableWidth - 1) {
-        const originalScrollContainer = document.querySelector('.scroll-container');
-        
-        // Clonar el scroll-container original
-        const clonedScrollContainer = originalScrollContainer.cloneNode(true);
-        
-        // Agregar la copia al final del container
-        container.appendChild(clonedScrollContainer);
-      }
-    }
-  });
-
-  const boxes = document.querySelectorAll('.box');
-
-boxes.forEach(box => {
-    box.addEventListener('mouseenter', () => {
-        // Verificamos que bot-list tenga opacidad 100% y bot-carrusel tenga opacidad 50%
-        if (botList.style.opacity === '1' && botCarrusel.style.opacity === '0.5') {
-            box.style.transition = 'font-size 0.5s ease';
-            box.style.fontSize = '15pt';
-        }
-    });
-
-    box.addEventListener('mouseleave', () => {
-        if (botList.style.opacity === '1' && botCarrusel.style.opacity === '0.5') {
-            box.style.transition = 'font-size 0.5s ease';
-            box.style.fontSize = '10pt';
-        }
-    });
-});
-
-
-
-
-// Asignamos evento de clic al bot-carrusel para restaurar las transiciones suaves
-botCarrusel.addEventListener('click', () => {
-    boxes.forEach(box => {
-        // Restauramos la transición original para todos los boxes
-        box.style.transition = 'font-size 0.5s ease, height 0.5s ease, width 0.5s ease, background-color 0.5s ease';
-    });
-});
-
-boxes.forEach(box => {
-    box.addEventListener('mouseenter', () => {
-        const botListOpacity = parseFloat(window.getComputedStyle(botList).opacity);
-        const botCarruselOpacity = parseFloat(window.getComputedStyle(botCarrusel).opacity);
-
-        // Verificamos que bot-list tenga opacidad 100% y bot-carrusel tenga opacidad 50%
-        if (botListOpacity === 1 && botCarruselOpacity === 0.5) {
-            box.style.transition = 'font-size 0.5s ease';
-            box.style.fontSize = '15pt';
-        } else {
-            // Si no se cumplen las condiciones, restauramos las transiciones originales
-            box.style.transition = 'font-size 0.5s ease, height 0.5s ease, width 0.5s ease, background-color 0.5s ease';
-            box.style.fontSize = '';    // Restablece el tamaño de la fuente
-        }
-    });
-
-    box.addEventListener('mouseleave', () => {
-        const botListOpacity = parseFloat(window.getComputedStyle(botList).opacity);
-        const botCarruselOpacity = parseFloat(window.getComputedStyle(botCarrusel).opacity);
-
-        // Solo si las condiciones se cumplen, volvemos al tamaño original suavemente
-        if (botListOpacity === 1 && botCarruselOpacity === 0.5) {
-            box.style.transition = 'font-size 0.5s ease';
-            box.style.fontSize = '10pt';
-        } else {
-            // Restauramos cualquier cambio si no se cumplen las condiciones
-            box.style.transition = 'font-size 0.5s ease, height 0.5s ease, width 0.5s ease, background-color 0.5s ease';
-            box.style.fontSize = '';    // Restablece el tamaño de la fuente
-        }
-    });
-});
-
-  
-});
-
-
-window.onload = function() {
-    // Seleccionamos el div con la clase 'scroll-container2'
-    const scrollContainer2 = document.querySelector('.scroll-container2');
-    const granContainer2 = document.querySelector('.gran-container2');
-
-    // Verificamos si el div fue encontrado
-    if (!scrollContainer2) {
-        console.error('No se encontró el div .scroll-container2');
-        return;
-    }
-
-    if (!granContainer2) {
-        console.error('No se encontró el div .gran-container2');
-        return;
-    }
-
-    // Función para verificar si se ha llegado al final del scroll
-    function checkScrollEnd() {
-        const scrollTop = scrollContainer2.scrollTop;
-        const scrollHeight = scrollContainer2.scrollHeight;
-        const clientHeight = scrollContainer2.clientHeight;
-
-        // Verifica si se ha llegado al final del scroll
-        if (scrollTop + clientHeight >= scrollHeight) {
-            console.log('TOCADO 2');
-        }
-    }
-
-    // Agrega un evento de scroll al scroll-container2
-    scrollContainer2.addEventListener('scroll', checkScrollEnd);
-};
-
-
-
-
+</body>
+</html>
 
  
 
