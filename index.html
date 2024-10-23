@@ -1,1109 +1,223 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Draggable Web con Matter.js y GSAP</title>
-    <style>
-        body, html {
-            margin: 0;
-            height: 100%;
-            width: 100%;
-            display: flex;
-            overflow: hidden;
-            
-        }
-
-         #ct-drc{
-            width: 40%;
-            height: 100%;
-
-        }
-
-        #ct-izq{
-            width: 60%;
-            height: 100%;
-
-        }
-        #ct-arb{
-            width: 100%;
-            height: 100%;
-            align-items: center;
-        }
-       #soltar-arb, #soltar-izq{
-        flex-direction: row;
-       }
-
-       #soltar-drc{
-        flex-direction: column;
-       }
-
-        .contenedor-izquierdo, #contenedor-derecho {
-           
-            display: flex;
-            transition: height 0.5s ease, width 0.5s ease, background-color 0.5s ease;
-        }
-        .contenedor-izquierdo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .contendor-soltar {
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            border: solid 1pt rgb(0, 0, 0);
-            transition: background-color 0.5s ease, width 0.5s ease;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            width: 100%;
-            border-radius: 10px;
-            
-        }
-        #contenedor-derecho {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-        }
-        .draggable-mut, .draggable, .hijo-de {
-            width: 200px;
-            height: 200px;
-            position: absolute;
-            cursor: pointer;
-            z-index: 4;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            transition: height 0.3s ease, width 0.3s ease, background-color 0.5s ease;
-            border-radius: 10px;
-            justify-content: center;
-            flex-shrink: 1;
-            
-
-        }
-
-        .draggable-mut{
-            color: #000000;
-        }
-        .hijo-de{
-            color: red;
-        }
-      img, video  {
-        max-width: 100%;
-            object-fit: contain;
-            border-radius: 10px;
-            border: solid 1pt black;
-            max-height: auto;
-
-      }
-     
-        .contenedores {
-            display: flex;
-            width: calc(100% - 4rem);
-            height: calc(100% - 3rem);
-            position: absolute;
-            z-index: 2;
-            align-items: center;
-            flex-direction: column;
-            top: 1.5rem;
-            left: 2rem;
-            border-radius: 4px;
-
-        }
-        .contenedor-superior{
-            width: 100%;
-            height: 5%;
-            display: flex;
-            border-radius: 4px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scroll Container en Tiempo Real</title>
+  <link rel="stylesheet" href="styles.css">
 
 
-        }
-        .contenedores-inferiores{
-            width: 100%;
-            height: 95%;
-            display: flex;
-            border-radius: 4px;
-flex-direction: row;
-
-        }
-        #separador {
-    width: 0.5rem;
-    cursor: ew-resize;
-    background-color: transparent;
-    height: 100%;
-    position: relative;
-    z-index: 1000;
-    transition: all 0.5s ease;
-  
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-
-}
-
-#separador:hover {
-    background-color: #000000;
-
-        }
-
-#separador-vertical {
-    height: 0.5rem;
-    cursor: ns-resize;
-    background-color: transparent;
-    width: 100%;
-    position: relative;
-    transition: all 0.5s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-}
-#separador-vertical:hover {
-    background-color: #000000;
-
-        }
-        #draggable1{
-            background-color: #FF8145;
-        }
-
-        #draggable2{
-            background-color: #FDFD57;
-           
-        
-        }
-
-        #draggable3{
-            background-color: white;
-            }
-         #draggable4{
-            background-color: #F85484;       
-         }
-         #draggable5{
-            background-color: #8C70A5;       
-         }
-.contenido-prj{
-display: flex;
-flex-direction: column;
-flex-direction: column;
-            overflow-y: auto;
-            width: calc(100% - 1rem);
-            height: calc(100% - 1rem);
-            align-items: center;
-            gap: 0.5rem;
-            overflow-x: hidden;
-            overflow-y: auto; /* Permitir scroll vertical */
-    touch-action: pan-y; /* Permitir desplazamiento */
-}
-
-.contenido-prj::-webkit-scrollbar {
-    width: 1rem; /* Ancho de la barra lateral */
-    opacity: 80%;
-    margin: 0;
-    display: flex;
-    position: absolute;
-
-  }
-  .contenido-prj::-webkit-scrollbar-track {
-    background-color: #F6B8C3;	
-	
-    border-radius: 4px; /* Bordes redondeados */
-    border: solid 1pt black;
- }
-
- .contenido-prj::-webkit-scrollbar-thumb {
-    background-color:#4DA77D; /* Color de la barra */
-    border-radius: 4px; /* Bordes redondeados */
-    opacity: 80%;
-    border: solid 1pt black;
-  }
-
-  .contenido-prj::-webkit-scrollbar-thumb:hover {
-    opacity: 80%;
-
-  }
-
-
-        .fondo{
-            position: absolute;
-            height: 100%;
-            width: 100%;
-        }
-        .cmyk-container {
-            
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            background-color: white;
-        }
-
-        .naranja, .azul1, .verde {
-            position: relative;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-.tamaño-completo{
-    width: 100%;
-            height: 100%;
-}
-        .layer {
-            position: absolute;
-            width: 2000%;
-            height: 2000%;
-            background-size: 2.7px 2.7px;
-            display: flex;
-            mix-blend-mode: multiply;
-          
-        }
-
-        .contenedor-naranja {
-            width: 300px;
-            height: 300px;
-            background-color: #FF8145;
-        }
-
-        .contenedor-azulclaro {
-            width: 300px;
-            height: 300px;
-            background-color: #85C5EE;
-        }
-
-        .circle {
-          position: absolute;
-            border-radius: 50%;
-            z-index: 2;
-            width: 100%;
-            height: 100%;
-           
-        }
-        .base{
-            width: 100%;
-            height: 100%;
-        }
-        .texto{
-            color: blue;
-            font-size: 50pt;
-            position: absolute;
-            z-index: 3;
-            mix-blend-mode: soft-light;
-        }
-
-        .regla {
-            position: absolute;
-            display: flex;
-        }
-
-        /* Reglas laterales */
-        .regla-vertical {
-            width: 2rem;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .regla-izquierda {
-            left: 0;
-            top: 0;
-            display: flex;
-            border-right: 0.5pt solid black;
-
-        }
-
-        .regla-derecha {
-            right: 0;
-            top: 0;
-            display: flex;
-            border-left: 0.5pt solid black;
-
-        }
-
-        /* Reglas horizontales */
-        .regla-horizontal {
-            height: 1.5rem;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-
-        .regla-superior {
-            top: 0;
-            left: 0;
-            margin: 0;
-            padding: 0;
-            border-bottom: 0.5pt solid black;
-            display: flex;
-
-        }
-
-        .regla-inferior {
-            bottom: 0;
-            left: 0;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            border-top: 0.5pt solid black;
-
-
-        }
-
-        /* Estilos de las subdivisiones */
-        .subdivision {
-            height: 0.5pt;
-            width: 100%;
-            margin: 0;
-        }
-
-        .subdivision-vertical {
-            width: 0.5pt;
-            height: 100%;
-            margin: 0;
-        }
-
-        .texto-regla {
-            color: black;
-            font-size: 10px;
-        }
-
-        .int-separador-v{
-            width: 100%;
-            height: 300%;
-            position: absolute;
-            z-index: 1001;
-background-color: rgb(0, 0, 0); 
-transition: all 0.5s ease;
-display: flex;
-align-items: center;
-justify-content: center;
-color: white;
-opacity: 0;
-text-align: center;
-text-justify: center;
-border-radius: 4px;
-
-       }
-
-       .int-separador-h{
-            width: 300%;
-            height: 100%;
-            position: absolute;
-            z-index: 10001;
-background-color: rgb(0, 0, 0); 
-transition: all 0.5s ease;
-display: flex;
-align-items: center;
-justify-content: center;
-color: white;
-opacity: 0;
-text-align: center;
-text-justify: center;
-border-radius: 4px;
-
-       }
-       .int-separador-v:hover{
-        opacity: 100%;
-
-       }
-       .int-separador-h:hover{
-        opacity: 100%;
-
-       }
-        @media (max-width: 767px) {
-            .contenedores-inferiores{
-            width: 100%;
-            height: 95%;
-            display: flex;
-            border-radius: 4px;
-flex-direction: column;
-
-        }
-        #ct-izq{
-            width: 100%;
-            height: 50%;
-
-        }
-
-        #ct-drc{
-            width: 100%;
-            height: 50%;
-
-        }
-        .draggable-mut, .draggable {
-            width: 130px;
-            height: 130px;
-            position: absolute;
-            cursor: pointer;
-            z-index: 4;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            transition: height 0.3s ease, width 0.3s ease, background-color 0.5s ease;
-            border-radius: 10px;
-            justify-content: center;
-            flex-shrink: 1;
-            
-
-        }
-
-        #separador {
-    width: 100%;
-    cursor: ew-resize;
-    background-color: transparent;
-    height: 0.5rem;
-    position: relative;
-    z-index: 1000;
-    transition: all 0.5s ease;
-
-}
-
-#soltar-drc{
-        flex-direction: row;
-       }
-        }
-    </style>
 </head>
 <body>
+  <div id="listado">LIST</div>
+  <div id="carrusel">GALLERY</div>
+  <div id="filt-artwork">ARTWORKS</div>
+  <div id="filt-sesion">PHOTOGRAPHY_SESIONS</div>
+  <div id="filt-videoclip">VIDEOCLIPS</div>
+
+
+
+<div class="top-div">
+ 
+
+  <div class="square top-left"></div>
+  <div class="square top-right"></div>
+  <div class="square bottom-left">
+    <div class="botonera_izquierda">
+
+      <div class="cristal-left">
+        <div class="bot-list">
+          [<div class="linias">
+            <hr><hr><hr><hr>
+          </div>]
+        </div>
+        <div class="bot-carrusel">
+          [<div class="cajitas-grande">
+            <div class="cajitas"></div><div class="cajitas"></div>
+          </div>]
+        </div>
+      </div>
+    
+      <div class="cristal-center"> 
+        <div id="bot_about">[ABOUT]
+    
+        </div> 
+      </div>
+
+
+    </div>
+ 
+
+</div> 
+  <div class="square bottom-right"> 
+<div class="cristal-right">
+    <div class="filtro" data-filter="all">
+      <div class="iconos2">[ALL]</div>
+    </div>
+
+    <div class="filtro" data-filter="videoclip">[
+      <div class="iconos"><img src="assets/iconos/icono_filtro_videoclips.svg"></div>
+       ]
+    </div>
+    <div class="filtro" data-filter="sesion">[
+      <div class="iconos"><img src="assets/iconos/icono_filtro_sesion_de_fotos.svg"></div>
+       ]
+    </div>
+    <div class="filtro" data-filter="artwork">[
+      <div class="iconos"><img src="assets/iconos/icono_filtro_artwork.svg"></div>
+       ]
+    </div>
+  </div>
+  </div>
+
+
+
+
+  <div id="gran-container" class="gran-container">  
+    <div class="scroll-container">
+
+        <a href="projects/project_01.html" class="box">
+        <div class="prj-titulo">
+            <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
+            <div class="prj-tag">SESIÓN FOTOGRÁFICA</div>
+        </div>
+        <div class="prj-foto"><img src="assets/image/home/foto_1.jpg"></div>
+        <div class="prj-fecha">PRIMAVERA_2024</div>
+        <div class="prj-handscript"><img src="assets/image/handscript/HANDWRITING_HYPHEN _B.png"></div>
+      </a>
+
+    <div class="box" data-category="artwork">
+        <div class="prj-titulo">
+            <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
+            <div class="prj-tag">ARTWORK</div>
+        </div>
+        <div class="prj-foto"><img src="assets/image/home/FOTO_2.jpg"></div>
+        <div class="prj-fecha">PRIMAVERA_2024</div>
+        <div class="prj-handscript"><img src="assets/image/handscript/HANDWRITING_TENDA_FLORES_AMARILLO.png"></div>
+    </div>
+
+    <div class="box" data-category="videoclip">
+        <div class="prj-titulo">
+            <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
+            <div class="prj-tag">VIDEOCLIP</div>
+        </div>
+        <div class="prj-foto"><img src="assets/image/home/13.gif"></div>
+        <div class="prj-fecha">PRIMAVERA_2024</div>
+        <div class="prj-handscript"><img src="assets/image/handscript/alivio_intermitente_texto_amarillo.png"></div>
+    </div>
+
+      <div class="box" data-category="artwork">
+        <div class="prj-titulo">
+          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
+          <div class="prj-tag">ARTWORK</div>
+        </div>
+        <div class="prj-foto"><img src="assets/image/home/200w.gif"></div>
+        <div class="prj-fecha">PRIMAVERA_2024</div>
+        <div class="prj-handscript"><img src="assets/image/handscript/HANDSCRIPT_PANTERA_BLEU_AMARILLO.png"></div>
+
+      </div>
+
+      <div class="box" data-category="videoclip">
+        <div class="prj-titulo">
+          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
+          <div class="prj-tag">VIDEOCLIP</div>
+        </div>
+        <div class="prj-foto"><img src="assets/image/home/giphy.gif"></div>
+        <div class="prj-fecha">PRIMAVERA_2024</div>
+        <div class="prj-handscript"><img src="assets/image/handscript/LETTERING_80VERANOS_AMARILLO_DM.png"></div>
+
+      </div>
+
+      <div class="box" data-category="sesion">
+        <div class="prj-titulo">
+          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
+          <div class="prj-tag">SESIÓN FOTOGRÁFICA</div>
+        </div>
+        <div class="prj-foto"><img src="assets/image/home/los-gif-de-expacioweb-enrique.gif"></div>
+        <div class="prj-fecha">PRIMAVERA_2024</div>
+      </div>
+
+      <div class="box" data-category="videoclip">
+        <div class="prj-titulo">
+          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
+          <div class="prj-tag">VIDEOCLIP</div>
+        </div>
+        <div class="prj-foto"><img src="assets/image/home/tokyo-lost.gif"></div>
+        <div class="prj-fecha">PRIMAVERA_2024</div>
+      </div>
+
+    
+      <div class="box" data-category="artwork">
+        <div class="prj-titulo">
+          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
+          <div class="prj-tag">ARTWORK</div>
+        </div>
+        <div class="prj-foto"><img src="assets/image/home/13.gif"></div>
+        <div class="prj-fecha">PRIMAVERA_2024</div>
+      </div>
+
+      <div class="box" data-category="artwork">
+        <div class="prj-titulo">
+          <div class="prj-nom">[MATINADA026_FOTO_TENDA]</div>
+          <div class="prj-tag">ARTWORK</div>
+        </div>
+        <div class="prj-foto"><img src="assets/image/home/200w.gif"></div>
+        <div class="prj-fecha">PRIMAVERA_2024</div>
+      </div>
+
+
+
+     
+
+ 
+
+
+
+      
+
+
+
+    </div>
+  </div>
   
-    </div>
-    <div class="contenedores">
-        <div class="contenedor-superior">
-            <div class="contenedor-izquierdo" id="ct-arb">
-                <div class="contendor-soltar" id="soltar-arb"></div>
-            </div>
-        </div>
-        <div id="separador-vertical"> 
-            <div class="int-separador-v">▼▲</div>
-        </div>
-        <div class="contenedores-inferiores">
-            <div class="contenedor-izquierdo" id="ct-izq">
-                <div class="contendor-soltar" id="soltar-izq"></div>
-            </div>
-            <div id="separador"><div class="int-separador-h">◀<br>▶</div></div> <!-- Nuevo div separador -->
-            <div class="contenedor-izquierdo" id="ct-drc">
-                <div class="contendor-soltar" id="soltar-drc"></div>
-            </div>
-        </div>
-        
-    </div> 
-    </div>
-    <div id="contenedor-derecho"></div>
-    <div class="draggable-mut" id="draggable1" style="left: 1px;">
-        <div class="circle">ABOUT</div>
 
-    </div>
-    <div class="draggable-mut" id="draggable2" style="left: 1.5px;">
-        <div class="contenido-prj">
-        <img src="delta_foto.jpg">
-        
-        <video loop autoplay muted>
-            <source src="POST 1 LOGO.mp4" type="video/mp4">
-            Tu navegador no soporta la etiqueta de video.
-        </video>
-        <img src="DELTA_TABLAS_web.png">
-    </div>
-    </div>
-    <div class="draggable-mut" id="draggable3" style="left: 2px;">
-        <div class="cmyk-container base">
-        <div class="naranja tamaño-completo">
-            <div class="cmyk-container circle">
-                 <div class="azul1 tamaño-completo"></div>
-            </div>
-        </div>
-    </div>
-    </div>
-    <div class="draggable-mut" id="draggable4">
-        <div class="cmyk-container base">
-        <div class="texto">hola</div>
-        <div class="verde tamaño-completo"></div>
-    </div>
-</div>
-    <div class="draggable-mut" id="draggable5">SERVICES</div>
 
-    <div class="regla regla-vertical regla-izquierda" id="regla-izquierda"></div>
-<div class="regla regla-vertical regla-derecha" id="regla-derecha"></div>
-
-<!-- Reglas horizontales -->
-<div class="regla regla-horizontal regla-superior" id="regla-superior"></div>
-<div class="regla regla-horizontal regla-inferior" id="regla-inferior"></div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
-    <script src="matter.min.js""></script>
-
+  <div id="gran-container2" class="gran-container2">  
    
-    
-    <script>
-const contIzquierdos = document.querySelectorAll('.contenedor-izquierdo');
-const dropZones = document.querySelectorAll('.contendor-soltar');
-const draggables = document.querySelectorAll('.draggable-mut');
-const draggableMutBodies = new Map();
-let isDragging = false;
-let currentDraggingBody = null;
-let cursorPosition = { x: 0, y: 0 };  // Guardar la posición del cursor o dedo
+  </div>
 
-const { Engine, Render, World, Bodies, Body } = Matter;
-const engine = Engine.create();
-const world = engine.world;
+</div>
 
-const contDerecho = document.getElementById('contenedor-derecho');
 
-// Renderizado de Matter.js
-const render = Render.create({
-    element: contDerecho,
-    engine: engine,
-    options: {
-        width: contDerecho.clientWidth,
-        height: contDerecho.clientHeight,
-        wireframes: false,
-        background: 'transparent'
-    }
-});
 
-Render.run(render);
+<div class="contact-container">
+  <a href="https://instagram.com">@DE.MATINADA</a>
+  <p>☼</p>
+  
 
-function createWalls() {
-    const width = contDerecho.clientWidth;
-    const height = contDerecho.clientHeight;
+  <a href="mailto:someone@example.com">HOLA@DEMATINADA.COM</a>
+</div>
 
-    const walls = [
-        Bodies.rectangle(width / 2, 0, width, 4, { isStatic: true, render: { fillStyle: 'transparent' } }),
-        Bodies.rectangle(width / 2, height, width, 4, { isStatic: true, render: { fillStyle: 'transparent' } }),
-        Bodies.rectangle(0, height / 2, 4, height, { isStatic: true, render: { fillStyle: 'transparent' } }),
-        Bodies.rectangle(width, height / 2, 4, height, { isStatic: true, render: { fillStyle: 'transparent' } })
-    ];
+<div class="about"> 
+  En D'Matinada Estudi, transformamos ideas en experiencias visuales cautivadoras.
+  Somos un estudio creativo audiovisual dedicado a contar historias que conectan y emocionan.
+  Nuestro equipo de cineastas, diseñadores y narradores visuales trabaja en la intersección del arte
+  y la tecnología, creando contenido único que destaca en un mundo saturado de imágenes.
 
-    World.add(world, walls);
-}
+  Desde videoclips, cortometrajes, hasta campañas publicitarias, nos apasiona cada proyecto en el que colaboramos.
+  Nos enfocamos en la innovación, la estética y la autenticidad, porque creemos que cada detalle cuenta y que las
+  historias más poderosas son las que se cuentan con alma.
+  
+  En D'Matinada, no solo producimos videos, creamos momentos que dejan huella.
+</div>
 
-createWalls();
+<div class="auto-div logotipo">
+  <img src="assets/image/logotipo/logotipo_naranja-01.svg">
+</div>
 
-window.addEventListener('resize', function() {
-    World.clear(world, false);
-    createWalls();
-    // Actualizar la posición de los cuerpos al redimensionar
-    draggableMutBodies.forEach((body, element) => {
-        const elemRect = element.getBoundingClientRect();
-        Body.setPosition(body, {
-            x: Math.min(Math.max(elemRect.left + elemRect.width / 2, 0), contDerecho.clientWidth),
-            y: Math.min(Math.max(elemRect.top + elemRect.height / 2, 0), contDerecho.clientHeight)
-        });
-    });
-});
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-function esDispositivoTactil() {
-    return ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-}
+<script src="scripts.js"></script>
 
-const isTouchDevice = esDispositivoTactil();
 
-draggables.forEach((draggable) => {
-    let dragTimeout;
-    let isMouseDown = false;
-    let draggableInstance;
-    let hasBeenReleased = false;
-    let releaseHandler;
-
-    addBody(draggable);
-
-    // Inicialización de GSAP Draggable
-    draggableInstance = Draggable.create(draggable, {
-        type: 'x,y',
-        zIndexBoost: true,
-        onPress: function (e) {
-            const isTouch = e.type === "touchstart";
-            cursorPosition.x = isTouch ? e.touches[0].clientX : e.clientX;  // Guardar posición inicial del cursor
-            cursorPosition.y = isTouch ? e.touches[0].clientY : e.clientY;
-            const body = draggableMutBodies.get(draggable);
-
-            hasBeenReleased = false;
-            isMouseDown = true;
-            isDragging = false;
-
-            releaseHandler = () => {
-                hasBeenReleased = true;
-                clearTimeout(dragTimeout);
-                draggableInstance.enable();
-                isMouseDown = false;
-                isDragging = false;
-                window.removeEventListener('mouseup', releaseHandler);
-                window.removeEventListener('touchend', releaseHandler);
-            };
-
-            window.addEventListener('mouseup', releaseHandler);
-            window.addEventListener('touchend', releaseHandler, { passive: false });
-
-            // Detectar si está dentro de una zona de soltado (contenedor-soltar)
-            if (draggable.parentElement.classList.contains('contenedor-soltar')) {
-                draggableInstance.disable(); // Deshabilitamos el Draggable
-
-                dragTimeout = setTimeout(() => {
-                    if (!hasBeenReleased && isMouseDown) {
-                        // Mover el elemento al body
-                        document.body.appendChild(draggable);
-                        gsap.set(draggable, {
-                            position: 'absolute',
-                            x: cursorPosition.x - draggable.offsetWidth / 2,  // Centrar en el cursor
-                            y: cursorPosition.y - draggable.offsetHeight / 2,
-                            width: '200px',
-                            height: '200px'
-                        });
-
-                        // Sincronizamos con Matter.js
-                        if (body) {
-                            Body.setStatic(body, true);
-                            Body.setAngle(body, body.angle);
-                            currentDraggingBody = body;
-                        }
-
-                        isDragging = true;
-                        draggableInstance.enable();  // Reactivamos el Draggable
-                        draggableInstance.startDrag(e);
-                    }
-                }, 300);
-            } else {
-                gsap.set(draggable, {
-                    x: cursorPosition.x - draggable.offsetWidth / 2,  // Centrar en el cursor
-                    y: cursorPosition.y - draggable.offsetHeight / 2
-                });
-
-                if (body) {
-                    Body.setStatic(body, true);
-                    Body.setAngle(body, body.angle);
-                    currentDraggingBody = body;
-                }
-
-                isDragging = true;
-            }
-        },
-        onDrag: function (e) {
-            if (!isDragging) return;
-
-            const isTouch = e.type === "touchmove";
-            const clientX = isTouch ? e.touches[0].clientX : e.clientX;
-            const clientY = isTouch ? e.touches[0].clientY : e.clientY;
-            const body = draggableMutBodies.get(draggable);
-
-            gsap.set(draggable, {
-                x: clientX - draggable.offsetWidth / 2,
-                y: clientY - draggable.offsetHeight / 2
-            });
-
-            if (body) {
-                Body.setPosition(body, {
-                    x: Math.min(Math.max(clientX, 0), contDerecho.clientWidth),
-                    y: Math.min(Math.max(clientY, 0), contDerecho.clientHeight)
-                });
-            }
-        },
-        onRelease: function (e) {
-            clearTimeout(dragTimeout);  // Limpiar el temporizador cada vez
-            isMouseDown = false;
-            isDragging = false;
-
-            const body = draggableMutBodies.get(draggable);
-
-            if (body) {
-                Body.setStatic(body, false);
-                currentDraggingBody = null;
-            }
-
-            const elemRect = draggable.getBoundingClientRect();
-            const dropZone = Array.from(dropZones).find(zone => {
-                const zoneRect = zone.getBoundingClientRect();
-                return isOverlapping(elemRect, zoneRect);
-            });
-
-            if (dropZone) {
-                dropZone.appendChild(draggable);
-                draggable.classList.replace('draggable-mut', 'hijo-de');
-
-                // **Matar completamente Draggable** al convertir a hijo-de
-                if (draggableInstance) {
-                    draggableInstance.kill();
-                    draggableInstance = null; // Eliminar referencia de la instancia
-                }
-
-                gsap.set(draggable, {
-                    position: 'relative',
-                    top: 'auto',
-                    left: 'auto',
-                    x: 0,
-                    y: 0,
-                    width: '100%',
-                    height: '100%'
-                });
-
-                removeBody(draggable);
-                monitorClickTime(draggable);
-            }
-
-            window.removeEventListener('mouseup', releaseHandler);
-            window.removeEventListener('touchend', releaseHandler);
-        }
-    })[0];
-});
-
-function monitorClickTime(element) {
-    let startTime, timer;
-
-    // Listener para eventos de ratón y táctiles
-    const startHandler = (e) => {
-        const isTouch = e.type === 'touchstart';
-        const clientX = isTouch ? e.touches[0].clientX : e.clientX;
-        const clientY = isTouch ? e.touches[0].clientY : e.clientY;
-
-        cursorPosition.x = clientX;
-        cursorPosition.y = clientY;
-
-        startTime = Date.now();
-        timer = setTimeout(() => {
-            const elapsedTime = Date.now() - startTime;
-            if (elapsedTime > 300 && element.classList.contains('hijo-de')) {
-                // **Cambio de clase a draggable-mut**
-                element.classList.replace('hijo-de', 'draggable-mut');
-
-                // Mover el div al body para ser draggable de nuevo
-                document.body.appendChild(element);
-
-                // Ajustar tamaño y estilo al tamaño original
-                gsap.set(element, {
-                    width: '200px',
-                    height: '200px',
-                    position: 'absolute',
-                    x: cursorPosition.x - element.offsetWidth / 2,  // Centrar en el cursor
-                    y: cursorPosition.y - element.offsetHeight / 2
-                });
-
-                // **Reiniciar Draggable**
-                draggableInstance = Draggable.create(element, {
-                    type: 'x,y',
-                    zIndexBoost: true,
-                    onPress: function(e) {
-                        const isTouch = e.type === "touchstart";
-                        const cx = isTouch ? e.touches[0].clientX : e.clientX;
-                        const cy = isTouch ? e.touches[0].clientY : e.clientY;
-                        gsap.set(element, {
-                            x: cx - element.offsetWidth / 2,
-                            y: cy - element.offsetHeight / 2
-                        });
-                    },
-                    onDrag: function(e) {},
-                    onRelease: function(e) {
-                        const elemRect = element.getBoundingClientRect();
-                        const dropZone = Array.from(dropZones).find(zone => {
-                            const zoneRect = zone.getBoundingClientRect();
-                            return isOverlapping(elemRect, zoneRect);
-                        });
-
-                        if (dropZone) {
-                            dropZone.appendChild(element);
-                            element.classList.replace('draggable-mut', 'hijo-de');
-
-                            // Desactivar GSAP Draggable
-                            draggableInstance.kill();
-                            draggableInstance = null;
-
-                            gsap.set(element, {
-                                position: 'relative',
-                                top: 'auto',
-                                left: 'auto',
-                                x: 0,
-                                y: 0,
-                                width: '100%',
-                                height: '100%'
-                            });
-
-                            removeBody(element);
-                            monitorClickTime(element);  // Reiniciar el ciclo de click
-                        }
-                    }
-                })[0];
-            }
-        }, 300);
-    };
-
-    element.addEventListener('mousedown', startHandler);
-    element.addEventListener('touchstart', startHandler);
-
-    // Limpieza del temporizador
-    const endHandler = () => clearTimeout(timer);
-
-    element.addEventListener('mouseup', endHandler);
-    element.addEventListener('touchend', endHandler);
-}
-
-function isOverlapping(rect1, rect2) {
-    return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
-}
-
-function addBody(element) {
-    const elemRect = element.getBoundingClientRect();
-    const body = Bodies.rectangle(
-        elemRect.left + elemRect.width / 2,
-        elemRect.top + elemRect.height / 2,
-        elemRect.width,
-        elemRect.height,
-        { restitution: 0.5 }
-    );
-    draggableMutBodies.set(element, body);
-    World.add(world, body);
-}
-
-function removeBody(element) {
-    const body = draggableMutBodies.get(element);
-    if (body) {
-        World.remove(world, body);
-        draggableMutBodies.delete(element);
-    }
-}
-
-function update() {
-    Engine.update(engine);
-
-    draggableMutBodies.forEach((body, element) => {
-        if (!isDragging || body !== currentDraggingBody) {
-            const pos = body.position;
-            const angle = body.angle;
-
-            element.style.transform = `translate(${pos.x - element.offsetWidth / 2}px, ${pos.y - element.offsetHeight / 2}px) rotate(${angle}rad)`;
-        }
-    });
-
-    requestAnimationFrame(update);
-}
-
-update();
-
-
-
-
-
-
-
-// Redimensionamiento Horizontal
-const separador = document.getElementById('separador');
-const contenedorIzq = document.getElementById('ct-izq');
-const contenedorDrc = document.getElementById('ct-drc');
-const contenedoresInferiores = document.querySelector('.contenedores-inferiores');
-
-let isResizing = false;
-
-function iniciarRedimensionamiento(e) {
-    isResizing = true;
-}
-
-function detenerRedimensionamiento() {
-    isResizing = false;
-}
-
-function redimensionarHorizontal(e) {
-    if (!isResizing) return;
-
-    if (e.type === 'touchmove') {
-        e.preventDefault();
-    }
-
-    const eventX = e.clientX || (e.touches && e.touches[0].clientX);
-    const contenedoresRect = contenedoresInferiores.getBoundingClientRect();
-    const mouseX = eventX - contenedoresRect.left;
-
-    const newLeftWidth = (mouseX / contenedoresRect.width) * 100;
-    const newRightWidth = 100 - newLeftWidth;
-
-    if (newLeftWidth > 5 && newRightWidth > 5) {
-        contenedorIzq.style.width = `${newLeftWidth}%`;
-        contenedorDrc.style.width = `${newRightWidth}%`;
-    }
-}
-
-// Eventos para redimensionamiento
-separador.addEventListener('mousedown', iniciarRedimensionamiento);
-separador.addEventListener('touchstart', iniciarRedimensionamiento, { passive: false });
-
-window.addEventListener('mousemove', redimensionarHorizontal);
-window.addEventListener('touchmove', redimensionarHorizontal, { passive: false });
-
-window.addEventListener('mouseup', detenerRedimensionamiento);
-window.addEventListener('touchend', detenerRedimensionamiento);
-
-// Redimensionamiento Vertical
-const separadorVertical = document.getElementById('separador-vertical');
-const contenedorSup = document.querySelector('.contenedor-superior');
-const contenedorInf = document.querySelector('.contenedores-inferiores');
-const contenedoresTotal = document.querySelector('.contenedores');
-
-let isResizingVertical = false;
-
-function iniciarRedimensionamientoVertical(e) {
-    isResizingVertical = true;
-}
-
-function detenerRedimensionamientoVertical() {
-    isResizingVertical = false;
-}
-
-function redimensionarVertical(e) {
-    if (!isResizingVertical) return;
-
-    if (e.type === 'touchmove') {
-        e.preventDefault();
-    }
-
-    const eventY = e.clientY || (e.touches && e.touches[0].clientY);
-    const contenedoresRect2 = contenedoresTotal.getBoundingClientRect();
-    const mouseY = eventY - contenedoresRect2.top;
-
-    const newTopHeight = (mouseY / contenedoresRect2.height) * 100;
-    const newBottomHeight = 100 - newTopHeight;
-
-    if (newTopHeight > 5 && newBottomHeight > 5) {
-        contenedorSup.style.height = `${newTopHeight}%`;
-        contenedorInf.style.height = `${newBottomHeight}%`;
-    }
-}
-
-// Eventos para redimensionamiento vertical
-separadorVertical.addEventListener('mousedown', iniciarRedimensionamientoVertical);
-separadorVertical.addEventListener('touchstart', iniciarRedimensionamientoVertical, { passive: false });
-
-window.addEventListener('mousemove', redimensionarVertical);
-window.addEventListener('touchmove', redimensionarVertical, { passive: false });
-
-window.addEventListener('mouseup', detenerRedimensionamientoVertical);
-window.addEventListener('touchend', detenerRedimensionamientoVertical);
-
-// Generación de capas
-function generarCapas(contenedor, capas) {
-    capas.forEach(({ gradient, rotation, opacity }) => {
-        const layer = document.createElement('div');
-        layer.classList.add('layer');
-        layer.style.backgroundImage = gradient;
-        layer.style.transform = `rotate(${rotation})`;
-        layer.style.opacity = opacity;
-        contenedor.appendChild(layer);
-    });
-}
-
-const naranjaGradients = [
-    { gradient: 'radial-gradient(circle, rgba(0, 255, 255, 1) 53%, transparent 50%)', rotation: '0deg', opacity: '0%' },
-    { gradient: 'radial-gradient(circle, rgba(255, 0, 255, 1) 53%, transparent 58%)', rotation: '45deg', opacity: '100%' },
-    { gradient: 'radial-gradient(circle, rgba(255, 255, 0, 1) 65%, transparent 60%)', rotation: '0deg', opacity: '100%' },
-    { gradient: 'radial-gradient(circle, rgba(0, 0, 0, 1) 50%, transparent 25%)', rotation: '45deg', opacity: '0%' }
-];
-
-const azul1Gradients = [
-    { gradient: 'radial-gradient(circle, rgba(0, 255, 255, 1) 50%, transparent 50%)', rotation: '0deg', opacity: '100%' },
-    { gradient: 'radial-gradient(circle, rgba(255, 0, 255, 1) 9%, transparent 58%)', rotation: '45deg', opacity: '100%' },
-    { gradient: 'radial-gradient(circle, rgba(255, 255, 0, 1) 65%, transparent 60%)', rotation: '0deg', opacity: '0%' },
-    { gradient: 'radial-gradient(circle, rgba(0, 0, 0, 1) 50%, transparent 25%)', rotation: '45deg', opacity: '0%' }
-];
-
-const verdeGradients = [
-    { gradient: 'radial-gradient(circle, rgba(0, 255, 255, 1) 80%, transparent 70%)', rotation: '45deg', opacity: '100%' },
-    { gradient: 'radial-gradient(circle, rgba(255, 0, 255, 1) 10%, transparent 70%)', rotation: '15deg', opacity: '100%' },
-    { gradient: 'radial-gradient(circle, rgba(255, 255, 0, 1) 62%, transparent 60%)', rotation: '75deg', opacity: '100%' },
-    { gradient: 'radial-gradient(circle, rgba(0, 0, 0, 1) 50%, transparent 25%)', rotation: '45deg', opacity: '0%' }
-];
-
-const naranjaDiv = document.querySelector('.naranja');
-generarCapas(naranjaDiv, naranjaGradients);
-
-const azul1Div = document.querySelector('.azul1');
-generarCapas(azul1Div, azul1Gradients);
-
-const verdeDiv = document.querySelector('.verde');
-generarCapas(verdeDiv, verdeGradients);
-
-function actualizarReglas() {
-    const alturaPantalla = window.innerHeight;
-    const anchuraPantalla = window.innerWidth;
-    const numSubdivisiones = 15;
-
-    const reglaIzquierda = document.getElementById('regla-izquierda');
-    const reglaDerecha = document.getElementById('regla-derecha');
-    const reglaSuperior = document.getElementById('regla-superior');
-    const reglaInferior = document.getElementById('regla-inferior');
-
-    [reglaIzquierda, reglaDerecha, reglaSuperior, reglaInferior].forEach(regla => regla.innerHTML = '');
-
-    function crearSubdivisiones(limite, esVertical) {
-        const fragmento = document.createDocumentFragment();
-        const paso = limite / numSubdivisiones;
-
-        for (let i = 0; i <= numSubdivisiones; i++) {
-            const div = document.createElement('div');
-            const texto = document.createElement('span');
-            texto.classList.add('texto-regla');
-            texto.innerText = Math.round(paso * i) + 'px';
-
-            if (esVertical) {
-                div.classList.add('subdivision-vertical');
-                div.style.top = `${paso * i}px`;
-                texto.style.transform = 'rotate(-90deg)';
-                div.appendChild(texto);
-            } else {
-                div.classList.add('subdivision');
-                div.style.left = `${paso * i}px`;
-                div.appendChild(texto);
-            }
-
-            fragmento.appendChild(div);
-        }
-
-        return fragmento;
-    }
-
-    reglaIzquierda.appendChild(crearSubdivisiones(alturaPantalla, true));
-    reglaDerecha.appendChild(crearSubdivisiones(alturaPantalla, true));
-    reglaSuperior.appendChild(crearSubdivisiones(anchuraPantalla, false));
-    reglaInferior.appendChild(crearSubdivisiones(anchuraPantalla, false));
-}
-
-window.addEventListener('load', actualizarReglas);
-window.addEventListener('resize', actualizarReglas);
-
-// Ajustar el manejo de scroll y arrastre en pantallas táctiles
-document.querySelector('.contenido-prj').addEventListener('touchstart', function (event) {
-    let scrollTimeout;
-    const touchStartHandler = (event) => {
-        scrollTimeout = setTimeout(() => {
-            if (!isMouseDown) {
-                event.preventDefault();
-            }
-        }, 300); // 300ms antes de activar el drag
-    };
-
-    const touchEndHandler = () => {
-        clearTimeout(scrollTimeout);
-    };
-
-    this.addEventListener('touchmove', touchStartHandler, { passive: false });
-    this.addEventListener('touchend', touchEndHandler);
-    this.addEventListener('touchcancel', touchEndHandler);
-});
-
-
-
-    
-    </script>
-    
-</body>
-</html>
-
- 
-
- 
-</script>
-
-</body>
-</html>
+<script>
